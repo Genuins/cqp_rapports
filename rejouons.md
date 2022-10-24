@@ -239,7 +239,7 @@ done
 
 ```
 
-### 3.8 Installation des applications et services
+### 3.8 Mise en place du riverse proxy des applications
 
 #### 3.8.1 Riverse proxy Syncthing
 
@@ -278,7 +278,7 @@ sudo lsof -i -P -n | grep LISTEN
 
 #mise à jour du systeme et installation d'apache
 sudo apt update
-sudo apt install apache2 -y
+#sudo apt install apache2 -y
 
 #Creation du server virtuel apache qui jouera le role de proxy pour que le site puisse etre atteint depuis le port 8086
 sudo touch /etc/apache2/sites-available/nextcloud.conf
@@ -340,7 +340,7 @@ sudo lsof -i -P -n | grep LISTEN
 
 ```
 sudo apt update
-sudo apt install apache2 -y
+#sudo apt install apache2 -y
 sudo touch /etc/apache2/sites-available/medicsite.conf
 #En raison de test j'utilise le 777. Dans la prod je le channgerai en 755
 sudo chmod 777 /etc/apache2/sites-available/medicsite.conf
@@ -379,47 +379,44 @@ for machine in `echo vm1 vm2 vm3 vm4`; do
     case $machine in
 
         vm1) 
-            echo "reverse proxy syncthing"
-            export ip_vm1;
-            ./reverse_proxy_syncthing.sh; 
-            echo "Installation Syncthing"
-            scp -i open_key scripts/syncthing2.sh  ubuntu@$ip_vm1:/tmp; 
-            ssh -i open_key ubuntu@$ip_vm1 "chmod +x /tmp/syncthing2.sh";
-            ssh -i open_key ubuntu@$ip_vm1 "source /tmp/syncthing2.sh";;
+           echo "reverse proxy syncthing"
+           export ip_vm1;
+           #./reverse_proxy_syncthing.sh; 
+           echo "Installation Syncthing"
+           scp -i open_key scripts/syncthing2.sh  ubuntu@$ip_vm1:/tmp; 
+           ssh -i open_key ubuntu@$ip_vm1 "chmod +x /tmp/syncthing2.sh";
+           ssh -i open_key ubuntu@$ip_vm1 "source /tmp/syncthing2.sh";;
         vm2) 
            echo "reverse proxy nextcloud"
            export ip_vm2;
-            ./reverse_proxy_nextcloud.sh;
+           #./reverse_proxy_nextcloud.sh;
            echo  "installation Nextcloud"
-            scp -i open_key scripts/nextcloud.sh  ubuntu@$ip_vm2:/tmp; 
-            ssh -i open_key ubuntu@$ip_vm2 "chmod +x /tmp/nextcloud.sh";
-            ssh -i open_key ubuntu@$ip_vm2 "source /tmp/nextcloud.sh";;
+           scp -i open_key scripts/nextcloud.sh  ubuntu@$ip_vm2:/tmp; 
+           ssh -i open_key ubuntu@$ip_vm2 "chmod +x /tmp/nextcloud.sh";
+           ssh -i open_key ubuntu@$ip_vm2 "source /tmp/nextcloud.sh";;
             
-        
-         vm3) 
-             echo "reverse proxy odoo"
-             export ip_vm3;
-             ./reverse_proxy_odoo.sh;
-             echo  "installation odoo"
-             scp -i open_key scripts/odoo2.sh  ubuntu@$ip_vm3:/tmp; 
-             ssh -i open_key ubuntu@$ip_vm3 "chmod +x /tmp/odoo2.sh";
-             ssh -i open_key ubuntu@$ip_vm3 "source /tmp/odoo2.sh";;
-			 
-		 vm4) 
-		     echo "Reverse proxy Medicarche"
-			 export ip_vm4;
-			 sudo chmod +x reverse_proxy_medicsite.sh;
-			 ./reverse_proxy_medicsite.sh;
-             echo "installation du site medicarche"
-             scp -i open_key scripts/sitemedicarche.sh  ubuntu@$ip_vm4:/tmp; 
-             ssh -i open_key ubuntu@$ip_vm4 "chmod +x /tmp/sitemedicarche.sh";
-             ssh -i open_key ubuntu@$ip_vm4 "source /tmp/sitemedicarche.sh";;
+        vm3) 
+           echo "reverse proxy odoo"
+           export ip_vm3;
+           #./reverse_proxy_odoo.sh;
+           echo  "installation odoo"
+           scp -i open_key scripts/odoo2.sh  ubuntu@$ip_vm3:/tmp; 
+           ssh -i open_key ubuntu@$ip_vm3 "chmod +x /tmp/odoo2.sh";
+           ssh -i open_key ubuntu@$ip_vm3 "source /tmp/odoo2.sh";;
+	   
+	 vm4) 
+	   echo "Reverse proxy Medicarche"
+	   export ip_vm4;
+	   sudo chmod +x reverse_proxy_medicsite.sh;
+	   # ./reverse_proxy_medicsite.sh;
+           echo "installation du site medicarche"
+           scp -i open_key scripts/sitemedicarche.sh  ubuntu@$ip_vm4:/tmp; 
+           ssh -i open_key ubuntu@$ip_vm4 "chmod +x /tmp/sitemedicarche.sh";
+           ssh -i open_key ubuntu@$ip_vm4 "source /tmp/sitemedicarche.sh";;
         *)
-          echo "Unknown" ;;
+           echo "Unknown" ;;
     esac
 done
-
-
 
 ```
 
