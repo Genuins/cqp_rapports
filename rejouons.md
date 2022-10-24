@@ -21,4 +21,33 @@ Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipé
 
 ### 3.1	Installation d’Openstack
 
+A little intro about the installation.
+```
+#!/bin/bash
 
+echo "###################################################################"
+echo "# Bienvenue dans l'installation automatisé de l'infra medicarche  #"
+echo "###################################################################"
+
+echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+sudo apt-get install -y -q
+sudo apt-get install dialog apt-utils -y
+sudo snap install microstack --edge --devmode
+snap list microstack
+sudo microstack init --auto --control
+sudo apt-get install git sshpass -y
+
+#Autoriser les machines virtuelles tournant dans microstack de se connecter à internet 
+# Le NAT est souvent implémenté par des routeurs, dans notre contextl'hôte effectuant le NAT comme un routeur NAT.
+sudo iptables -t nat -A POSTROUTING -s 10.20.20.1/24 ! -d 10.20.20.1/24 -j MASQUERADE
+sudo sysctl net.ipv4.ip_forward=1
+
+#Recuperation des access pour se connecter à la console
+sudo snap get microstack config.credentials.keystone-password
+
+#Recuperation des scripts d'installation des vms et l'installation des applications
+git clone https://gitlab.com/Genuiz/medicopen.git
+cd medicopen
+source auto.sh
+
+```
