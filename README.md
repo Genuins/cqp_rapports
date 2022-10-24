@@ -18,8 +18,13 @@ Le déploiement a été réalisé grâce à Vagrant qui est un outil de créatio
 -	12 vCPUs
 -	Adresse IP 192.168.33.16 
 
-![Virtual Box](https://github.com/Genuins/cqp_rapports/blob/main/images/virtualbox_ui.JPG) (https://www.virtualbox.org)
+Ces parametres se retrouvent dans la partie centrale de la figure 1.
 
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/virtualbox_ui.JPG?raw=true" alt="Virtualbox"/>
+ <p align="center"> Figure 1 : Interface graphique de virtual box </p>
+</p>
+  
 Par ailleurs, Visual Code est un environnement de développement intégré qui facilite la création de scripts. Pour administrer la machine hôte qui héberge le cloud privé de l’entreprise Medicarche nous avons installé des plugins. Parmi les extensions que nous avons installées nous avons RemoteSSH une extension qui permet de se connecter en mode SSH dans les machines virtuelles se trouvant dans le cloud privé de l’entreprise Medicarche pour pouvoir effectuer des actions d’administration si cela s’avère nécessaire. 
 
 Nous avons également travaillé avec Packer qui est une solution open source permettant de construire des images système pour de multiples plateforme cloud. Pour construire les images dont nous avons besoin sous Openstack nous avons récupéré une image Linux Ubuntu Bionic 18.04 depuis le site officiel de Openstack avec le format QCOW2. Pour personnaliser l’image nous avons utilisé Packer en définissant un utilisateur par défaut et le mot de passe, la capacité maximale de mémoire RAM, de disque dur, le format, le format du clavier, la langue du système d’exploitation et le nombre de processeurs pouvant être utilisé.
@@ -37,6 +42,12 @@ Les scripts sont écrits de sorte à automatiser :
 - La création des règles de sécurité ;
 - Le clonage et le téléversement de l’image Linux Ubuntu et son déploiement ;
 - La configuration de la connexion SSH de chaque instance pour assurer le déploiement des applications qui sont Syncthing, Nextcloud, Odoo et le site de l’entreprise Medicarche.
+
+<p align="center">
+ <img styles="width: 200px;" src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquet1.png?raw=true" alt="Maquete 1"/>
+ <p align="center"> Figure 2 : Maquette de base proposé lors de l'appel </p>
+</p>
+  
 
 Pour notre maquette, afin de donner accès aux applications, depuis le Système hôte Windows, nous avons pensé à la mise en place d’un serveur mandataire (reserve proxy).
 
