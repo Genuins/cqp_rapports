@@ -77,7 +77,7 @@ OpenStack est un ensemble de logiciels open source permettant de déployer une i
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/installation_microstack.JPG?raw=true" alt="Script installation Microstack"/>
- <p align="center"> Figure 4 : Script installation microstack</p>
+ <p align="center"> Figure 5 : Script installation microstack</p>
 </p>
   
 a)	Tableau de bord 
@@ -87,6 +87,11 @@ Un tableau de bord permet de visualiser l’ensemble de ressources de l’infras
 b)	Topologie réseau dans Openstack
 
 Lors de l’installation de Openstack plusieurs fonctionnalités sont installées par défaut. Une topologie réseau représentant l’architecture du réseau. Nous avons utilisé un sous réseau privé et un sous réseau public.  Pour de raison de sécurité, nous avons déployé les machines virtuelles contenant les applications web dans le réseau privé et nous avons pensé à leur attribuer une adresse IP privée dont la passerelle est 192.168.222.1. Pour permettre la communication avec internet, un routeur virtuel fait office de passerelle entre le réseau privé et le sous réseau public. L’adresse IP de la passerelle est 10.20.20.224.
+
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/archi_reseau.JPG?raw=true" alt="Topologie réseau"/>
+ <p align="center"> Figure 6 : Topologie du réseau dans Openstack </p>
+</p>
 
 c)	Les gabarits
 
