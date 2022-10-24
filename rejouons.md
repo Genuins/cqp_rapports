@@ -19,14 +19,51 @@ Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipé
 
 ## III.	Procédure de déploiement de l’infrastructure Medicarche
 
-### 3.1	Installation d’Openstack
 
-A little intro about the installation.
+### 3.1 Déploiement de la machine virtuelle avec l'outil Vagrant
+
+Dans un fichier nommmé Vagrantfile copier et coller le script ci-dessous puis éxecuter la commande `vagrant up`
+
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Installation du systeme d'exploitation Linux Ubuntu qui acceuillera le cloud privé Openstack
+
+Vagrant.configure("2") do |config|
+   
+   # installer le plugin vagrant plugin install vagrant-disksize
+  config.disksize.size = '100GB'
+  config.vm.define "openstack" do |os|
+    os.vm.box = "bento/ubuntu-20.04"
+    os.vm.hostname = "openstack"
+    #os.vm.provision "docker"
+    os.vm.box_url = "bento/ubuntu-20.04"
+	os.vm.disk :disk, size: "80GB", primary: true
+	os.vm.disk :disk, size: "40GB", name: "extra_storage"
+    os.vm.network :private_network, ip: "192.168.33.16"
+    os.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 10000]
+      v.customize ["modifyvm", :id, "--name", "openstack"]
+      v.customize ["modifyvm", :id, "--cpus", "12"]
+    end
+	os.vm.provision "shell", path: "scripts/openstack.sh"
+  end
+  
+  ```
+
+
+### 3.2 Installation d’Openstack
+
+De preference créer un fichier bash openstack.sh copier et coller le script ci-dessous
+
 ```
 #!/bin/bash
 
 echo "###################################################################"
-echo "# Bienvenue dans l'installation automatisé de l'infra medicarche  #"
+echo "# Bienvenue dans l'installation automatisé de l'infra Medicarche  #"
 echo "###################################################################"
 
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -46,8 +83,64 @@ sudo sysctl net.ipv4.ip_forward=1
 sudo snap get microstack config.credentials.keystone-password
 
 #Recuperation des scripts d'installation des vms et l'installation des applications
-git clone https://gitlab.com/Genuiz/medicopen.git
-cd medicopen
-source auto.sh
+#git clone https://gitlab.com/Genuiz/medicopen.git
+#cd medicopen
+#source auto.sh
 
 ```
+
+### 3.3 Création des gabarits
+
+```
+#Creation des gabarits qui acceuilleront les vms contenant des applications
+microstack.openstack flavor create m3.custom --id auto --ram 1024 --disk 5 --vcpus 2
+microstack.openstack flavor create m4.custom --id auto --ram 1024 --disk 8 --vcpus 2
+microstack.openstack flavor create m5.custom --id auto --ram 1024 --disk 9 --vcpus 2
+microstack.openstack flavor list
+
+```
+
+### 3.4 Création des groupes de sécurité
+
+```
+#Creation du groupe de securité qui autorise un certain nombre des ports permettant aux applications d'etre atteint depuis le réseau privée ou internet  
+microstack.openstack security group create private-sg
+microstack.openstack security group rule create private-sg --ingress --protocol tcp --dst-port 8085:8085 --remote-ip 0.0.0.0/0
+microstack.openstack security group rule create private-sg --ingress --protocol tcp --dst-port 8086:8086 --remote-ip 0.0.0.0/0
+microstack.openstack security group rule create private-sg  --ingress --protocol tcp --dst-port 8087:8087 --remote-ip 0.0.0.0/0
+microstack.openstack security group rule create private-sg  --ingress --protocol tcp --dst-port 8088:8088 --remote-ip 0.0.0.0/0
+microstack.openstack security group rule create private-sg  --ingress --protocol tcp --dst-port 22:22 --remote-ip 0.0.0.0/0
+microstack.openstack security group rule create private-sg  --ingress --protocol tcp --dst-port 80:80 --remote-ip 0.0.0.0/0
+
+microstack.openstack security group rule create private-sg --protocol icmp private-sg
+#microstack.openstack security group rule create private-sg --protocol tcp --src-ip 0.0.0.0/0 --dst-port 1:65525
+microstack.openstack security group rule create private-sg --protocol tcp --remote-ip 0.0.0.0/0 --dst-port 1:65525
+microstack.openstack security group rule list
+
+```
+
+### 3.5 Uploader l'image ubuntu depuis le depot git
+
+```
+#Clonage du systeme d'exploitation Ubuntu dans un repos dinstant afin de televerser l'OS dans Microstack
+git clone https://gitlab.com/Genuiz/os-ubuntu-openstack.git
+microstack.openstack image create --container-format bare --disk-format qcow2 --file ./os-ubuntu-openstack/focal-server-cloudimg-amd64.img ubuntu
+microstack.openstack image list
+
+```
+
+### 3.6 Création de la paire de clé
+
+```
+#Creation de la pair de cle rsa pour securiser la connexion vms tournant sur Microstack de puis l'hote. 
+ssh-keygen -q -C "" -N ""  -f open_key
+sudo chown vagrant open_key
+sudo chmod 400 open_key
+microstack.openstack keypair create --public-key open_key.pub sto4_key
+microstack.openstack keypair list
+
+```
+
+
+
+
