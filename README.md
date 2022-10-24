@@ -105,7 +105,14 @@ Openstack permet de personnaliser des gabarits qui sont utilisés pour déployer
 -	La portée public ou privée ;
 -	Le swap ;
 
-On a aussi la possibilité d’ajouter des metadatas pour mieux identifier le gabarit. 
+On a aussi la possibilité d’ajouter des metadatas pour mieux identifier le gabarit. Sur la figure 7 on a trois exemples de création de gabarit qui correspondent à trois machines virtuelles identiques sauf pour le disque dont la capacité est de 5, 8 et 9 gigabits.
+
+
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/gabarits.JPG?raw=true" alt="Topologie réseau"/>
+ <p align="center"> Figure 7 : Script de creation des gabarits </p>
+</p>
+
 
 d)	Les images
 
@@ -125,9 +132,13 @@ Nous avons pensé à mettre les machines virtuelles dans un même sous réseau p
 -	Le port 22 pour assurer une connexion sécurisée en SSH ;
 -	Le Port 80 pour autoriser la communication en http.
 
-Les machines virtuelles ont toutes une adresse IP privée et une adresse IP publique afin de communiquer sur le réseau privé (communication entre les machines virtuelles) et sur le réseau externe pour la communication avec l’extérieur. Openstack propose un outil pour le log de toutes les actions effectuées sur la machine virtuelle. Elles peuvent être auditées grâce à cette fonctionnalité. Les machines virtuelles utilisent une clé privée crée lors du déploiement cela permet de mettre un accent sur la sécurité. Le script suivant donne un aperçu de la création de la machine virtuelle.
+Les machines virtuelles ont toutes une adresse IP privée et une adresse IP publique afin de communiquer sur le réseau privé (communication entre les machines virtuelles) et sur le réseau externe pour la communication avec l’extérieur. Openstack propose un outil pour le log de toutes les actions effectuées sur la machine virtuelle. Elles peuvent être auditées grâce à cette fonctionnalité. Les machines virtuelles utilisent une clé privée crée lors du déploiement cela permet de mettre un accent sur la sécurité. Le script de la figure 8 donne un aperçu de la création de la machine virtuelle et l'association d'une adresse ip virtuelle.
 
-Mettre le Script ici
+
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/instances.JPG?raw=true" alt="création de la virtuelle machine"/>
+ <p align="center"> Figure 8 : Script de création de la virtuelle machine </p>
+</p>
 
 
 
@@ -139,8 +150,13 @@ Openstack offre une interface d’administration des groupes de sécurité, on p
 
 g)	Les pairs de clé 
 
-Pour avoir accès à la machine virtuelle et pouvoir faire les opérations d’administration, nous avons, lors de la création des instances, mis en place un script qui permet de créer unr pairr de clés RSA et de les associer à l’instance. Ce type de connexion permet de renforcer la sécurité ; ainsi seuls les administrateurs de Medicarche pourrons avoir accès aux instances pour effectuer les taches de maintenances. Le script suivant permet d’automatiser la création de clé pour se connecter en SSH.
+Pour avoir accès à la machine virtuelle et pouvoir faire les opérations d’administration, nous avons, lors de la création des instances, mis en place un script qui permet de créer unr pairr de clés RSA et de les associer à l’instance. Ce type de connexion permet de renforcer la sécurité ; ainsi seuls les administrateurs de Medicarche pourrons avoir accès aux instances pour effectuer les taches de maintenances. Le script de la figure 9 permet d’automatiser la création de clé pour se connecter en SSH. On crée la paire de clé en attribuant le droit au propiretaire de la clé et en modifiant le fichier en lecture seule.
  
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/key.JPG?raw=true" alt="création de paire de clé"/>
+ <p align="center"> Figure 9 : Script de création de la paire de clé </p>
+</p>
+
 
 
 h)	Gestions des utilisateurs 
@@ -188,9 +204,13 @@ Dans le cadre du projet de déploiement il est important de passer des tests. Pl
 
 ### 5.1	Test de montée en charge 
 
-Le test de montée en charge que nous prévoyons d’effectuer est un test au cours duquel nous aurons simulé un nombre d'utilisateurs sans cesse croissant de manière à déterminer quelle charge limite le système est capable de supporter sans tomber. Nous effectuerons un test sur l’application Odoo, Nextcloud, Syncthing et le site web de l’entreprise Medicarche. Nous prévoyons de mettre en place un script en utilisant l’outil h2load. Une fois l’utilitaire installé, on a à exécuter la commande suivante, que l’on prévoit de scripter, pour toutes les autres applications de la plateforme Medicarche. Dans ce script nous simulons 100 clients qui produiront au total 10000 requêtes HTTP.
+Le test de montée en charge que nous prévoyons d’effectuer est un test au cours duquel nous aurons simulé un nombre d'utilisateurs sans cesse croissant de manière à déterminer quelle charge limite le système est capable de supporter sans tomber. Nous effectuerons un test sur l’application Odoo, Nextcloud, Syncthing et le site web de l’entreprise Medicarche. Nous prévoyons de mettre en place un script en utilisant l’outil h2load. Une fois l’utilitaire installé, on a à exécuter la commande suivante, que l’on prévoit de scripter, pour toutes les autres applications de la plateforme Medicarche. Dans ce script nous simulons 100 clients qui produiront au total 10000 requêtes HTTP. Le script de la figure 10 permet de faire le test de montée en charge d'une machine virtuelle en passant  en parametre le nombre de client et le nombre de requête.
 
- Mettre le script
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/test_mg.JPG?raw=true" alt="Montée en charge h2load"/>
+ <p align="center"> Figure 10 : Test de montée en charge </p>
+</p>
+
 
 ### 5.2	Test de stress du système
 
