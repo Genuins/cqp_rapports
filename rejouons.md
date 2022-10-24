@@ -239,4 +239,187 @@ done
 
 ```
 
+### 3.8 Installation des applications et services
+
+#### 3.8.1 Riverse proxy Syncthing
+
+```
+sudo apt update
+sudo apt install apache2 -y
+sudo sed -i '5,1d' /etc/apache2/ports.conf #Delete Listen 80 in apache
+sudo systemctl restart apache2
+sudo touch /etc/apache2/sites-available/syncthing.conf
+sudo chmod 777 /etc/apache2/sites-available/syncthing.conf
+sudo a2ensite syncthing.conf
+sudo systemctl restart apache2
+sudo sed -i '$ a Listen 8085' /etc/apache2/ports.conf
+#sudo ufw allow 8085/tcp
+#systemctl status ufw
+sudo systemctl restart apache2
+sudo lsof -i -P -n | grep LISTEN
+
+echo "<VirtualHost *:8085>
+        ServerName localhost
+        #ProxyPreserveHost On
+        ProxyPass / http://$ip_vm1:9090/
+        ProxyPassReverse / http://$ip_vm1:9090/
+      </VirtualHost>" > /etc/apache2/sites-available/syncthing.conf
+
+sudo a2ensite syncthing.conf     
+sudo a2enmod proxy proxy_http headers proxy_wstunnel
+sudo systemctl restart apache2
+sudo lsof -i -P -n | grep LISTEN
+
+```
+
+#### 3.8.2 Riverse proxy Nextcloud
+
+```
+
+#mise à jour du systeme et installation d'apache
+sudo apt update
+sudo apt install apache2 -y
+
+#Creation du server virtuel apache qui jouera le role de proxy pour que le site puisse etre atteint depuis le port 8086
+sudo touch /etc/apache2/sites-available/nextcloud.conf
+#En raison de test j'utilise le 777. Dans la prod je le channgerai en 755
+sudo chmod 777 /etc/apache2/sites-available/nextcloud.conf
+echo "<VirtualHost *:8086>
+        ServerName localhost
+        #ProxyPreserveHost On
+        ProxyPass / http://$ip_vm2:9000/
+        ProxyPassReverse / http://$ip_vm2:9000/
+      </VirtualHost>"  > /etc/apache2/sites-available/nextcloud.conf
+
+sudo sed -i '$ a Listen 8086' /etc/apache2/ports.conf
+
+#activation des modules apaches et redemarrage du serveur 
+sudo service apache2 reload
+sudo a2ensite nextcloud.conf
+sudo a2enmod proxy proxy_http headers proxy_wstunnel
+sudo a2enmod rewrite
+sudo a2enmod headers
+sudo a2enmod env
+sudo a2enmod dir
+sudo a2enmod mime
+sudo systemctl reload apache2
+sudo systemctl restart apache2
+
+#verifier si le port est bien exposé
+sudo lsof -i -P -n | grep 8086
+
+```
+
+#### 3.8.3 Riverse proxy Odoo
+
+```
+sudo apt update
+#sudo apt install apache2 -y
+sudo a2enmod proxy proxy_http headers proxy_wstunnel
+sudo systemctl restart apache2
+sudo touch /etc/apache2/sites-available/odoo.conf
+sudo chmod 777 /etc/apache2/sites-available/odoo.conf
+sudo a2ensite odoo.conf
+sudo sed -i '$ a Listen 8087' /etc/apache2/ports.conf
+sudo systemctl restart apache2
+
+#adresse ip à modifier
+echo "<VirtualHost *:8087>
+        ServerName localhost
+        #ProxyPreserveHost On
+        ProxyPass / http://$ip_vm3:8069/
+        ProxyPassReverse / http://$ip_vm3:8069/
+      </VirtualHost>" > /etc/apache2/sites-available/odoo.conf
+
+sudo service apache2 restart
+sudo lsof -i -P -n | grep LISTEN
+
+```
+
+#### 3.8.3 Riverse proxy Site Medicarche
+
+```
+sudo apt update
+sudo apt install apache2 -y
+sudo touch /etc/apache2/sites-available/medicsite.conf
+#En raison de test j'utilise le 777. Dans la prod je le channgerai en 755
+sudo chmod 777 /etc/apache2/sites-available/medicsite.conf
+
+#Creation du server virtuel apache qui jouera le role de proxy pour que le site puisse etre atteint depuis le port 8088
+echo "<VirtualHost *:8088>
+        ServerName localhost
+        #ProxyPreserveHost On
+        ProxyPass / http://$ip_vm4:9100/
+        ProxyPassReverse / http://$ip_vm4:9100/
+      </VirtualHost>"  > /etc/apache2/sites-available/medicsite.conf
+
+sudo sed -i '$ a Listen 8088' /etc/apache2/ports.conf
+
+#activation des modules apaches et redemarrage du serveur 
+sudo service apache2 reload
+sudo a2ensite medicsite.conf
+sudo a2enmod proxy proxy_http headers proxy_wstunnel
+sudo a2enmod rewrite
+sudo a2enmod headers
+sudo a2enmod env
+sudo a2enmod dir
+sudo a2enmod mime
+sudo systemctl reload apache2
+sudo systemctl restart apache2
+sudo lsof -i -P -n | grep 8088
+
+```
+
+### 3.9 Installation des applications et services
+
+```
+#Installation des applications et mise en place du reverse proxy qui permet requête d'etre acheminé de internet vers la vm
+for machine in `echo vm1 vm2 vm3 vm4`; do 
+
+    case $machine in
+
+        vm1) 
+            echo "reverse proxy syncthing"
+            export ip_vm1;
+            ./reverse_proxy_syncthing.sh; 
+            echo "Installation Syncthing"
+            scp -i open_key scripts/syncthing2.sh  ubuntu@$ip_vm1:/tmp; 
+            ssh -i open_key ubuntu@$ip_vm1 "chmod +x /tmp/syncthing2.sh";
+            ssh -i open_key ubuntu@$ip_vm1 "source /tmp/syncthing2.sh";;
+        vm2) 
+           echo "reverse proxy nextcloud"
+           export ip_vm2;
+            ./reverse_proxy_nextcloud.sh;
+           echo  "installation Nextcloud"
+            scp -i open_key scripts/nextcloud.sh  ubuntu@$ip_vm2:/tmp; 
+            ssh -i open_key ubuntu@$ip_vm2 "chmod +x /tmp/nextcloud.sh";
+            ssh -i open_key ubuntu@$ip_vm2 "source /tmp/nextcloud.sh";;
+            
+        
+         vm3) 
+             echo "reverse proxy odoo"
+             export ip_vm3;
+             ./reverse_proxy_odoo.sh;
+             echo  "installation odoo"
+             scp -i open_key scripts/odoo2.sh  ubuntu@$ip_vm3:/tmp; 
+             ssh -i open_key ubuntu@$ip_vm3 "chmod +x /tmp/odoo2.sh";
+             ssh -i open_key ubuntu@$ip_vm3 "source /tmp/odoo2.sh";;
+			 
+		 vm4) 
+		     echo "Reverse proxy Medicarche"
+			 export ip_vm4;
+			 sudo chmod +x reverse_proxy_medicsite.sh;
+			 ./reverse_proxy_medicsite.sh;
+             echo "installation du site medicarche"
+             scp -i open_key scripts/sitemedicarche.sh  ubuntu@$ip_vm4:/tmp; 
+             ssh -i open_key ubuntu@$ip_vm4 "chmod +x /tmp/sitemedicarche.sh";
+             ssh -i open_key ubuntu@$ip_vm4 "source /tmp/sitemedicarche.sh";;
+        *)
+          echo "Unknown" ;;
+    esac
+done
+
+
+
+```
 
