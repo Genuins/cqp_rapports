@@ -44,8 +44,15 @@ Les scripts sont écrits de sorte à automatiser :
 - La configuration de la connexion SSH de chaque instance pour assurer le déploiement des applications qui sont Syncthing, Nextcloud, Odoo et le site de l’entreprise Medicarche.
 
 <p align="center">
- <img styles="width: 200px;" src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquet1.png?raw=true" alt="Maquete 1"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquet1.png?raw=true" alt="Maquete 1"/>
  <p align="center"> Figure 2 : Maquette de base proposé lors de l'appel </p>
+</p>
+
+<p>Initialement nous avons mis en œuvre la maquette de base (Figure 3). À la suite des difficultés rencontrées en rapport avec les performances de la machine virtuelle hôte, nous avons été contraint d'utiliser les services de base que propose Openstack.</p>
+
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquettes_int%C3%A9gr%C3%A9_bis.JPG?raw=true" alt="Maquete 2"/>
+ <p align="center"> Figure 3 : Maquette de base proposé lors de l'appel </p>
 </p>
   
 
@@ -55,12 +62,24 @@ Avant d’entrer dans le vif du sujet nous aimerons faire une piqure de rappel c
 
 En résumé, le déploiement de l’infrastructure Medicarche a été scripté de bout en bout. Pour commencer le déploiement on a exécute la commande vagrant up, une commande de l’outil vagrant qui permet de créer une machine virtuelle. Nous avons provisionné le script de déploiement dans le fichier vagrantfile afin d’automatiser l’installation de Openstack ainsi que le déploiement des applications et du site web. Cela donne :
 
-Mettre ici le scrip Vagrant.
+
+
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/vagrantfile.JPG?raw=true" alt="Script Vangantfile"/>
+ <p align="center"> Figure 4 : Script vagrant qui permet de déployer une machine virtuelle provisionné </p>
+</p>
+  
 
 ### 3.1	Installation d’Openstack
 
 OpenStack est un ensemble de logiciels open source permettant de déployer une infrastructure de type cloud privé en suivant le modèle Infrastructure as a Service (IaaS). Une fois l'environnement Openstack installé, des accès (credantials) nous sont fournis afin d'accéder à la console en tant qu’administrateur.  Par défaut, Openstack configure la partie réseau en créant un sous réseau privé, un sous réseau public, la table de routage et d'autres services pour ne citer que ceux-là. La commande iptables nous permet d’autoriser le trafic venant de Openstack vers internet.
- 
+
+
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/installation_microstack.JPG?raw=true" alt="Script installation Microstack"/>
+ <p align="center"> Figure 4 : Script installation microstack</p>
+</p>
+  
 a)	Tableau de bord 
 
 Un tableau de bord permet de visualiser l’ensemble de ressources de l’infrastructure. Cela nous permet aussi de garder un œil sur l’évolution de l’infrastructure. Nous pouvons obtenir une vue sur les instances en cours d’utilisation, la quantité des vCPUs, la quantité de la RAM allouée aux instances en cours d’utilisation, les volumes, les groupes de sécurité, les sous-réseaux, les ports, les routeurs ainsi les adresses IP publiques des instances. 
@@ -105,6 +124,8 @@ Les machines virtuelles ont toutes une adresse IP privée et une adresse IP publ
 
 Mettre le Script ici
 
+
+
 f)	Les groupes de sécurité
 
 Un groupe de sécurité agit en tant que pare-feu virtuel pour les instances afin de contrôler le trafic entrant et sortant. Nous avons mis en place un groupe de sécurité nommé private-sg afin d’autoriser que les ports et les adresses IP nécessaires à la communication des instances (voir plus haut). Afin de resserrer le trafic entrant nous avons appliqué la stratégie de moindre privilège en autorisant que le strict nécessaire.
@@ -115,7 +136,7 @@ g)	Les pairs de clé
 
 Pour avoir accès à la machine virtuelle et pouvoir faire les opérations d’administration, nous avons, lors de la création des instances, mis en place un script qui permet de créer unr pairr de clés RSA et de les associer à l’instance. Ce type de connexion permet de renforcer la sécurité ; ainsi seuls les administrateurs de Medicarche pourrons avoir accès aux instances pour effectuer les taches de maintenances. Le script suivant permet d’automatiser la création de clé pour se connecter en SSH.
  
-Mettre le Script ici
+
 
 h)	Gestions des utilisateurs 
 
