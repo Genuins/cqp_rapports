@@ -141,6 +141,102 @@ microstack.openstack keypair list
 
 ```
 
+### 3.7 Création des machines virtuelles
 
+```
+#Boucle permettant la création des vms 
+for machine in `echo vm1 vm2 vm3 vm4`; do
+
+    echo "Debut creation VM $machine"
+
+    case $machine in
+
+        vm1)
+	  microstack.openstack server create --network test --security-group private-sg --key-name sto4_key --flavor m4.custom --image ubuntu $machine
+	  microstack.openstack floating ip create external
+	  foo=`microstack.openstack floating ip list | egrep -e "None.*\|.*None"`
+
+	  if [ ! -z "$foo" ]; then
+ 	     #$value= echo "$foo" | head -n1 | awk '{print $1;}'
+	     bar=`echo " $foo" | cut -d '|' -f 3 | sed 's/ //g'`
+	     # La variable bar contient l'adresse ip flottante
+	     echo "Floating IP = $bar"
+	  else
+	     echo "Error"
+	     exit 1
+	  fi
+
+          ip_vm1=$bar; echo $ip_vm1;;
+
+        vm2)
+	  microstack.openstack server create --network test --security-group private-sg --key-name sto4_key --flavor m4.custom --image ubuntu $machine
+	  microstack.openstack floating ip create external
+          foo=`microstack.openstack floating ip list | egrep -e "None.*\|.*None"`
+
+	  if [ ! -z "$foo" ]; then
+             #$value= echo "$foo" | head -n1 | awk '{print $1;}'
+	     bar=`echo " $foo" | cut -d '|' -f 3 | sed 's/ //g'`
+	     # La variable bar contient l'adresse ip flottante
+	     echo "Floating IP = $bar"
+	  else
+	     echo "Error"
+	     exit 1
+	  fi
+
+          ip_vm2=$bar; echo $ip_vm2;;
+
+        vm3)
+	  microstack.openstack server create --network test --security-group private-sg --key-name sto4_key --flavor m5.custom --image ubuntu $machine
+	  microstack.openstack floating ip create external
+          foo=`microstack.openstack floating ip list | egrep -e "None.*\|.*None"`
+
+	  if [ ! -z "$foo" ]; then
+             #$value= echo "$foo" | head -n1 | awk '{print $1;}'
+	     bar=`echo " $foo" | cut -d '|' -f 3 | sed 's/ //g'`
+	     # La variable bar contient l'adresse ip flottante
+	     echo "Floating IP = $bar"
+	  else
+	     echo "Error"
+	     exit 1
+	  fi
+
+         ip_vm3=$bar; echo $ip_vm3;;
+
+        vm4)
+          microstack.openstack server create --network test --security-group private-sg --key-name sto4_key --flavor m3.custom --image ubuntu $machine
+	  microstack.openstack floating ip create external
+          foo=`microstack.openstack floating ip list | egrep -e "None.*\|.*None"`
+
+	  if [ ! -z "$foo" ]; then
+	     #$value= echo "$foo" | head -n1 | awk '{print $1;}'
+	     bar=`echo " $foo" | cut -d '|' -f 3 | sed 's/ //g'`
+	     # La variable bar contient l'adresse ip flottante
+	     echo "Floating IP = $bar"
+	  else
+	     echo "Error"
+	     exit 1
+	  fi
+
+          ip_vm4=$bar; echo $ip_vm4;;
+
+        *)
+            echo "Error";;
+    esac
+	microstack.openstack server add floating ip $machine $bar
+        echo "Je dors pendant 300s"
+       sleep 300
+       #Ce script permet aux vms d'etre connu sans intervention humaine
+       echo "ubuntu@$bar"
+       ssh -o StrictHostKeyChecking=no -o PasswordAuthentication=no root@$bar
+       sshpass -f password.txt ssh-copy-id  -i ./open_key.pub root@"$bar"
+       sudo cat ./open_key.pub | ssh -i open_key ubuntu@"$bar" "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+       ssh -o StrictHostKeyChecking=no -o PasswordAuthentication=no ubuntu@$bar
+       sshpass -f password.txt ssh-copy-id  -i ./open_key.pub ubuntu@"$bar"
+       sudo cat ./open_key.pub | ssh -f open_key ubuntu@"$bar" "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+ 
+      echo "Fin de la creation VM $machine"
+done
+
+```
 
 
