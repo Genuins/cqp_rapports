@@ -214,9 +214,13 @@ Le test de montée en charge que nous prévoyons d’effectuer est un test au co
 
 ### 5.2	Test de stress du système
 
-Pour s’assurer que les gabarits choisis pour accueillir les applications web de l’entreprise Medicarche répondent bien au minimum des capacités requises, nous mettons en place ce type de test qui aura pour objectif de stresser le CPU, la mémoire RAM, le I/O et le disque. Pour cela nous utilisons l’outil stress and stress-ng. L’installation s'effectue en ligne de commande et on pourra voir le résultat sur l’interface CLI. 
+Pour s’assurer que les gabarits choisis pour accueillir les applications web de l’entreprise Medicarche répondent bien au minimum des capacités requises, nous mettons en place ce type de test qui aura pour objectif de stresser le CPU, la mémoire RAM, le I/O et le disque. Pour cela nous utilisons l’outil stress and stress-ng. L’installation s'effectue en ligne de commande et on pourra voir le résultat sur l’interface CLI. Sur la figure 11 nous pouvons voir sur le tableau de bord les points importants comme le traffic du réseau, les nombres des requêtes, le nombre des nouveaux utilisateurs, des tentatives de connexion ...
 
-Metrte un exemple
+<p align="center">
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/supervison_vm.JPG?raw=true" alt="monitoring"/>
+ <p align="center"> Figure 11 : monitoring de la machine virtuelle </p>
+</p>
+
 
 ### 5.3	Test de performance 
 
