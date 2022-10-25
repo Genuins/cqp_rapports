@@ -222,7 +222,21 @@ Après avoir installé les applications web de l’entreprise Medicarche, on doi
  
  ### 6.1 Introduction à la supervision
  
- ### 6.2 Grafana
+ La supervision cloud, on parle également de monitoring cloud, elle consiste en une série d'opérations d'analyse, de recueil d'information et de gestion qui contrôle un flux de travail cloud. Un exemple de flux de travail cloud peut être l'ingestion dans un cloud de données en provenance de capteurs, leur nettoyage et mise en forme avant de les déposer dans un gestionnaire de données à des fins d'analyse. Le monitoring cloud peut utiliser des services ou des outils de monitoring manuels (installés manuellement) et/ou automatisés (installés via une démarche DevOps) pour vérifier qu'un cloud est opérationnel.
+
+En un mot, la surveillance du cloud est une méthode d'examen, d'observation et de gestion du flux opérationnel dans une infrastructure informatique basée sur le cloud. Des techniques de gestion manuelles ou automatisées permettent de confirmer la disponibilité et les performances des sites Web, des serveurs, des applications et d'autres infrastructures en nuage. Cette évaluation continue des niveaux de ressources, des temps de réponse des serveurs et de la vitesse a pour objectif de prévoir un état problématique éventuel d'un service cloud avant que des problèmes plus graves surviennent, par exemple la défaillance totale de tous les services cloud.
+
+Dans ce qui suit nous utilisons des outils bien connus dans la communauté pour faire de la supervision cloud, outils déployer soit manuellement soit automatiquement, pour surveiller soit les VM, donc le système d'exploitation de la VM (sous section 6.2), soit de manière automatique (sous section 6.3), pour surveiller le cloud i.e. les services disponibles pour OpenStack / MicroStack. 
+
+
+### 6.2 Solutions de supervision des VMs
+
+Parmi les solutions le plus utilisée d'après l'outil Google Trend pour faire de la supervision sont Prometheus, Nagios, InfluxDB, Grafana. Dans cette section, nous allons décrire les fonctionnalités de manière generale de ces outils.
+
+ ### 6.2.1 Grafana
+ 
+ Grafana est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme Graphite, InfluxDB, Prometheus et Elasticsearch.
+ 
  
  ### 6.3 Prometheus
  
