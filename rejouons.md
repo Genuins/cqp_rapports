@@ -20,7 +20,11 @@ Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipé
 ## III.	Procédure de déploiement de l’infrastructure Medicarche
 
 
-### 3.1 Déploiement de la machine virtuelle avec l'outil Vagrant
+### 3.1 Clonage du dépot Medicarche
+
+Avant de commencer veuillez  cloner le dépot de l'infrastricture Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git`
+
+### 3.2 Déploiement de la machine virtuelle avec l'outil Vagrant
 
 Dans un fichier nommmé Vagrantfile copier et coller le script ci-dessous puis éxecuter la commande `vagrant up`
 
