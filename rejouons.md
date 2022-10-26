@@ -101,11 +101,13 @@ sudo sysctl net.ipv4.ip_forward=1
 sudo snap get microstack config.credentials.keystone-password
 
 #Recuperation des scripts d'installation des vms et l'installation des applications
-#git clone https://gitlab.com/Genuiz/medicopen.git
-#cd medicopen
-#source auto.sh
+git clone https://gitlab.com/Genuiz/medicopen.git
+cd medicopen
+source auto.sh
 
 ```
+
+Dans le fichier `auto.sh` on retrouve les scripts qui  permettent de créer les gabarits des machine virtuelle, des groupes de sécurité, du televersement de l'image ubuntu dans Openstack, de la création des VMs ainsi que l'installation des applications. tous les scripts utilisés seront detaillé dans les lignes qui suivent. 
 
 ### 3.3 Création des gabarits
 
@@ -121,7 +123,8 @@ microstack.openstack flavor list
 ### 3.4 Création des groupes de sécurité
 
 ```
-#Creation du groupe de securité qui autorise un certain nombre des ports permettant aux applications d'etre atteint depuis le réseau privée ou internet  
+#Creation du groupe de securité qui autorise un certain nombre des ports permettant aux applications d'etre atteint depuis le réseau privée ou internet
+
 microstack.openstack security group create private-sg
 microstack.openstack security group rule create private-sg --ingress --protocol tcp --dst-port 8085:8085 --remote-ip 0.0.0.0/0
 microstack.openstack security group rule create private-sg --ingress --protocol tcp --dst-port 8086:8086 --remote-ip 0.0.0.0/0
