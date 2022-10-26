@@ -241,7 +241,14 @@ Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de donné
  
  ### 6.3 Prometheus
  
-[Prometheus](https://prometheus.io/) est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de point d'entrée exposé à l'aide du protocole HTTP.
+[Prometheus](https://prometheus.io/) est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de point d'entrée exposé à l'aide du protocole HTTP. Prometheus fonctionne de la manière suivante:
+
+* Plusieurs agents (exporteurs) qui s'exécutent généralement sur les machines à surveiller et vont exposer les métriques de suivi.
+* Prometheus pour la centralisation et le stockage des métriques.
+* Alertmanager qui déclenche l'émission d'alertes en fonction de règles.
+
+Pour visualiser les métrics, grafana ou Zabbix peut etre utiliser pour la restitution des métriques sous la forme de tableaux de bord.
+Prometheus à son propre langage de requete PromQL utilisé pour créer des tableaux de bord et la création d'alertes.
 
  ### 6.4 Conclusion
  
