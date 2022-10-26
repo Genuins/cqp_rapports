@@ -22,11 +22,11 @@ Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipé
 
 ### 3.1 Clonage du dépot Medicarche
 
-Avant de commencer veuillez  cloner le dépot de l'infrastricture Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git` vous retrouverez un dossier scripts qui contient l'installation du cloud privé Openstack/Microstack et le fichier Vagranfile qui sera detaillé dans les lignes qui suivent.
+Avant de commencer veuillez  cloner le dépot de l'infrastructure Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git` vous retrouverez un dossier scripts qui contient l'installation du cloud privé Openstack/Microstack et le fichier Vagranfile qui sera detaillé dans les lignes qui suivent.
 
 ### 3.2 Déploiement de la machine virtuelle avec l'outil Vagrant
 
-Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up`
+Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up` qui utilise le fichier `Vagrantfile`suivant : 
 
 ```
 # -*- mode: ruby -*-
@@ -36,7 +36,9 @@ Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up`
 
 Vagrant.configure("2") do |config|
    
-  # installer le plugin vagrant plugin install vagrant-disksize
+  # au préalable vous avez à installer le plugin permettant de redimensioner le disque par la commande : 
+  # vagrant plugin install vagrant-disksize depuis l'hote Windows
+  
   # Definition de la taille du disque de la VM
   config.disksize.size = '100GB'
   config.vm.define "openstack" do |os|
@@ -64,11 +66,11 @@ Vagrant.configure("2") do |config|
   end
   
   ```
+Le script précédent est commenté pour detailler les differentes étapes de construction.
 
+### 3.3 Installation d’Openstack
 
-### 3.2 Installation d’Openstack
-
-Le dossier scripts contient le fichier openstack.sh qui est composé du script suivant que nous commenté 
+Le fichier Vagrantfile précédent permet l'éxecution du script openstack.sh donc il n'y a rien à faire. Le dossier scripts contient le fichier openstack.sh qui est présenté ci-dessous: 
 
 ```
 #!/bin/bash
@@ -109,7 +111,7 @@ source auto.sh
 
 Dans le fichier `auto.sh` on retrouve les scripts qui  permettent de créer les gabarits des machine virtuelle, des groupes de sécurité, du televersement de l'image ubuntu dans Openstack, de la création des VMs ainsi que l'installation des applications. tous les scripts utilisés seront detaillé dans les lignes qui suivent. 
 
-### 3.3 Création des gabarits
+### 3.4 Création des gabarits
 
 ```
 #Creation des gabarits qui acceuilleront les vms contenant des applications
@@ -120,7 +122,7 @@ microstack.openstack flavor list
 
 ```
 
-### 3.4 Création des groupes de sécurité
+### 3.5 Création des groupes de sécurité
 
 ```
 #Creation du groupe de securité qui autorise un certain nombre des ports permettant aux applications d'etre atteint depuis le réseau privée ou internet
@@ -140,7 +142,7 @@ microstack.openstack security group rule list
 
 ```
 
-### 3.5 Uploader l'image ubuntu depuis le depot git
+### 3.6 Uploader l'image ubuntu depuis le depot git
 
 ```
 #Clonage du systeme d'exploitation Ubuntu dans un repos dinstant afin de televerser l'OS dans Microstack
@@ -150,7 +152,7 @@ microstack.openstack image list
 
 ```
 
-### 3.6 Création de la paire de clé
+### 3.7 Création de la paire de clé
 
 ```
 #Creation de la pair de cle rsa pour securiser la connexion vms tournant sur Microstack de puis l'hote. 
@@ -162,7 +164,7 @@ microstack.openstack keypair list
 
 ```
 
-### 3.7 Création des machines virtuelles
+### 3.8 Création des machines virtuelles
 
 ```
 #Boucle permettant la création des vms 
@@ -260,9 +262,9 @@ done
 
 ```
 
-### 3.8 Mise en place du riverse proxy des applications
+### 3.9 Mise en place du riverse proxy des applications
 
-#### 3.8.1 Riverse proxy Syncthing
+#### 3.9.1 Riverse proxy Syncthing
 
 ```
 sudo apt update
@@ -293,7 +295,7 @@ sudo lsof -i -P -n | grep LISTEN
 
 ```
 
-#### 3.8.2 Riverse proxy Nextcloud
+#### 3.9.2 Riverse proxy Nextcloud
 
 ```
 
@@ -331,7 +333,7 @@ sudo lsof -i -P -n | grep 8086
 
 ```
 
-#### 3.8.3 Riverse proxy Odoo
+#### 3.9.3 Riverse proxy Odoo
 
 ```
 sudo apt update
@@ -357,7 +359,7 @@ sudo lsof -i -P -n | grep LISTEN
 
 ```
 
-#### 3.8.3 Riverse proxy Site Medicarche
+#### 3.9.4 Riverse proxy Site Medicarche
 
 ```
 sudo apt update
@@ -391,7 +393,7 @@ sudo lsof -i -P -n | grep 8088
 
 ```
 
-### 3.9 Installation des applications et services
+### 4.0 Installation des applications et services
 
 ```
 #Installation des applications et mise en place du reverse proxy qui permet requête d'etre acheminé de internet vers la vm
