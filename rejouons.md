@@ -22,7 +22,7 @@ Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipé
 
 ### 3.1 Clonage du dépot Medicarche
 
-Avant de commencer veuillez  cloner le dépot de l'infrastricture Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git`
+Avant de commencer veuillez  cloner le dépot de l'infrastricture Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git` vous retrouverez un dossier scripts qui contient l'installation du cloud privé Openstack/Microstack et le fichier Vagranfile qui sera detaillé dans les lignes qui suivent.
 
 ### 3.2 Déploiement de la machine virtuelle avec l'outil Vagrant
 
