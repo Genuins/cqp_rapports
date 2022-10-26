@@ -213,7 +213,7 @@ Pour s’assurer que les gabarits choisis pour accueillir les applications web d
 
 Après avoir installé les applications web de l’entreprise Medicarche, on doit vérifier que le système répond normalement aux attentes du client. Pour s’assurer que c’est réellement le cas, nous avons choisi d'utiliser l’outil Tsung qui est approprié pour ce type de test. Tsung est un outil de test de performances permettant de réaliser des benchmarks massifs. De manière résumée, Tsung est un outil qui nous permettra de faire un rapport sur les statistiques du système, des transactions, du réseau, du débit et même des statuts liés aux requêtes HTTP.
 
- ## VI.	Supervision avec Grafana et Prometeus
+ ## VI.	Supervision
  
  ### 6.1 Introduction à la supervision
  
