@@ -235,11 +235,13 @@ Parmi les solutions le plus utilisée d'après l'outil Google Trend pour faire d
 
  ### 6.2.1 Grafana
  
-Grafana est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme Graphite, InfluxDB, Prometheus et Elasticsearch.
+[Grafana](https://grafana.com/) est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme Graphite, InfluxDB, Prometheus et Elasticsearch.
 Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de données. Il peut être déployé avec Docker. Il est écrit en Go et dispose d’une API HTTP complète.
  
  
  ### 6.3 Prometheus
+ 
+ Prometheus est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de point d'entrée exposé à l'aide du protocole HTTP.
  
  ### 6.4 Conclusion
  
