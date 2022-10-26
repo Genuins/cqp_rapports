@@ -37,16 +37,21 @@ Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up`
 Vagrant.configure("2") do |config|
    
   # installer le plugin vagrant plugin install vagrant-disksize
-  # 
+  # Definition de la taille du disque de la VM
   config.disksize.size = '100GB'
   config.vm.define "openstack" do |os|
+    # Type de systeme d'exploitation utilisé
     os.vm.box = "bento/ubuntu-20.04"
+    #nom de la machine virtuelle
     os.vm.hostname = "openstack"
-    #os.vm.provision "docker"
+    #Lien vers le depot vagrant contenant le système d'exploitation
     os.vm.box_url = "bento/ubuntu-20.04"
+        #Taille du disque primaire et du disque secondaire
 	os.vm.disk :disk, size: "80GB", primary: true
 	os.vm.disk :disk, size: "40GB", name: "extra_storage"
+    # Adresse IP de la machine virtuelle dans le réseau
     os.vm.network :private_network, ip: "192.168.33.16"
+    # Proprieté de la machine virtuelle
     os.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -54,6 +59,7 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--name", "openstack"]
       v.customize ["modifyvm", :id, "--cpus", "12"]
     end
+        # Chemin vers le fichier contenant le script d'installation du cloud Microstack
 	os.vm.provision "shell", path: "scripts/openstack.sh"
   end
   
