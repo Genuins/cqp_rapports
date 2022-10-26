@@ -77,12 +77,19 @@ echo "###################################################################"
 echo "# Bienvenue dans l'installation automatisé de l'infra Medicarche  #"
 echo "###################################################################"
 
+# Ces lignes de commande permettent de rendre l'installation non interactive 
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 sudo apt-get install -y -q
 sudo apt-get install dialog apt-utils -y
+
+# Installation de microstack en mode developpeur avec l'outil snap
 sudo snap install microstack --edge --devmode
 snap list microstack
+
+#Installation de la configuration initial de microstack
 sudo microstack init --auto --control
+
+#Installation de git et sshpass 
 sudo apt-get install git sshpass -y
 
 #Autoriser les machines virtuelles tournant dans microstack de se connecter à internet 
