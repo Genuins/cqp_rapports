@@ -21,7 +21,7 @@ Le déploiement a été réalisé grâce à Vagrant qui est un outil de créatio
 Ces paramètres se retrouvent dans la partie centrale de la figure 1.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/virtualbox_ui.JPG?raw=true" alt="Virtualbox"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/virtualbox_ui.JPG?raw=true" alt="Virtualbox" style="width: 45vw; min-width: 230px;" />
  <p align="center"> Figure 1 : Interface graphique de virtual box </p>
 </p>
   
@@ -44,14 +44,14 @@ Les scripts sont écrits de sorte à automatiser :
 - La configuration de la connexion SSH de chaque instance pour assurer le déploiement des applications qui sont Syncthing, Nextcloud, Odoo et le site de l’entreprise Medicarche.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquet1.png?raw=true" alt="Maquete 1"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquet1.png?raw=true" alt="Maquete 1"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 2 : Maquette de base proposée lors de l'appel d'offre</p>
 </p>
 
 <p>Initialement nous avons commencé par une mise en œuvre la maquette de base décrite à la figure 2. À la suite de difficultés rencontrées en rapport avec les performances de la machine virtuelle hôte, nous avons été contraints d'utiliser les services de base que propose Openstack.</p>
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquettes_int%C3%A9gr%C3%A9_bis.JPG?raw=true" alt="Maquete 2"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquettes_int%C3%A9gr%C3%A9_bis.JPG?raw=true" alt="Maquete 2"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 3 : Maquette de base proposé lors de l'appel </p>
 </p>
   
@@ -64,7 +64,7 @@ En résumé, le déploiement de l’infrastructure Medicarche a été scripté d
 
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/vagrantfile.JPG?raw=true" alt="Script Vangantfile"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/vagrantfile.JPG?raw=true" alt="Script Vangantfile"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 4 : Script vagrant qui permet de déployer une machine virtuelle provisionnée. </p>
 </p>
   
@@ -75,7 +75,7 @@ OpenStack est un ensemble de logiciels open source permettant de déployer une i
 
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/installation_microstack.JPG?raw=true" alt="Script installation Microstack"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/installation_microstack.JPG?raw=true" alt="Script installation Microstack"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 5 : Script d'installation Microstack</p>
 </p>
   
@@ -88,7 +88,7 @@ b)	Topologie réseau dans Openstack
 Lors de l’installation de Openstack plusieurs fonctionnalités sont installées par défaut. Une topologie réseau représentant l’architecture du réseau. Nous avons utilisé un sous réseau privé et un sous réseau public.  Pour des raisons de sécurité, nous avons déployé les machines virtuelles contenant les applications web dans le réseau privé et nous avons pensé à leur attribuer une adresse IP privée dont la passerelle est 192.168.222.1. Pour permettre la communication avec internet, un routeur virtuel fait office de passerelle entre le réseau privé et le sous réseau public. L’adresse IP de la passerelle est 10.20.20.224. Cette partie du déploiement est reprise à la figure 6.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/archi_reseau.JPG?raw=true" alt="Topologie réseau"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/archi_reseau.JPG?raw=true" alt="Topologie réseau"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 6 : Topologie du réseau dans Openstack </p>
 </p>
 
@@ -107,7 +107,7 @@ Openstack permet de personnaliser des gabarits qui sont utilisés pour déployer
 On a aussi la possibilité d’ajouter des metadatas pour mieux identifier le gabarit. Sur la figure 7, nous avons trois exemples de création de gabarit qui correspondent à trois machines virtuelles identiques sauf pour le disque dont la capacité est de 5, 8 et 9 gigabits.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/gabarits.JPG?raw=true" alt="Topologie réseau"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/gabarits.JPG?raw=true" alt="Topologie réseau"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 7 : Script de creation des gabarits </p>
 </p>
 
@@ -132,7 +132,7 @@ Nous avons pensé à mettre les machines virtuelles dans un même sous réseau p
 Les machines virtuelles ont toutes une adresse IP privée et une adresse IP publique afin de communiquer sur le réseau privé (communication entre les machines virtuelles) et sur le réseau externe pour la communication avec l’extérieur. Openstack propose un outil pour le log de toutes les actions effectuées sur la machine virtuelle. Elles peuvent être auditées grâce à cette fonctionnalité. Les machines virtuelles utilisent une clé privée crée lors du déploiement cela permet de mettre un accent sur la sécurité. Le script de la figure 8 donne un aperçu de la création de la machine virtuelle et l'association d'une adresse ip virtuelle.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/instances.JPG?raw=true" alt="création de la virtuelle machine"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/instances.JPG?raw=true" alt="création de la virtuelle machine"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 8 : Script de création de la virtuelle machine </p>
 </p>
 
@@ -147,7 +147,7 @@ g)	Les pairs de clé
 Pour avoir accès à la machine virtuelle et pouvoir faire les opérations d’administration, nous avons, lors de la création des instances, mis en place un script qui permet de créer une paire de clés RSA et de les associer à l’instance. Ce type de connexion permet de renforcer la sécurité ; ainsi seuls les administrateurs de Medicarche pourrons avoir accès aux instances pour effectuer les taches de maintenances. Le script de la figure 9 permet d’automatiser la création d'une clé pour se connecter en SSH dans la machine virtuelle. On crée la paire de clé en attribuant le droit au propiretaire de la clé et en modifiant le fichier en lecture seule.
  
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/key.JPG?raw=true" alt="création de paire de clé"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/key.JPG?raw=true" alt="création de paire de clé"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 9 : Script de création de la paire de clés. </p>
 </p>
 
@@ -199,7 +199,7 @@ Dans le cadre du projet de déploiement il est important de passer des tests. Pl
 Le test de montée en charge que nous prévoyons d’effectuer est un test au cours duquel nous aurons simulé un nombre d'utilisateurs sans cesse croissant de manière à déterminer quelle charge limite le système est capable de supporter sans tomber. Nous effectuerons un test sur l’application Odoo, Nextcloud, Syncthing et le site web de l’entreprise Medicarche. Nous avons prévu de mettre en place un script en utilisant l’outil h2load. Une fois l’utilitaire installé, on a à exécuter la commande décrite à la figure 10, que l’on prévoit de scripter, pour toutes les autres applications de la plateforme Medicarche. Dans ce script nous simulons 100 clients qui produiront au total 10000 requêtes HTTP. En résumé, le script de la figure 10 permet de faire le test de montée en charge d'une machine virtuelle en passant en paramètre le nombre de clients et le nombre de requêtes.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/test_mg.JPG?raw=true" alt="Montée en charge h2load"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/test_mg.JPG?raw=true" alt="Montée en charge h2load"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 10 : Test de montée en charge </p>
 </p>
 
@@ -209,7 +209,7 @@ Le test de montée en charge que nous prévoyons d’effectuer est un test au co
 Pour s’assurer que les gabarits choisis pour accueillir les applications web de l’entreprise Medicarche répondent bien au minimum des capacités requises, nous mettons en place ce type de test qui a pour objectif de stresser le CPU, la mémoire RAM, le I/O et le disque. Pour cela nous utilisons l’outil stress and stress-ng. L’installation s'effectue en ligne de commande et on pourra voir le résultat sur l’interface CLI. Sur la figure 11 nous pouvons voir sur le tableau de bord les points importants comme le traffic du réseau, les nombres des requêtes, le nombre des nouveaux utilisateurs, des tentatives de connexion.
 
 <p align="center">
- <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/supervison_vm.JPG?raw=true" alt="monitoring"/>
+ <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/supervison_vm.JPG?raw=true" alt="monitoring"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 11 : monitoring de la machine virtuelle </p>
 </p>
 
@@ -222,11 +222,11 @@ Après avoir installé les applications web de l’entreprise Medicarche, on doi
  
  ### 6.1 Introduction à la supervision
  
- La supervision cloud, on parle également de monitoring cloud, elle consiste en une série d'opérations d'analyse, de recueil d'information et de gestion qui contrôle un flux de travail cloud. Un exemple de flux de travail cloud peut être l'ingestion dans un cloud de données en provenance de capteurs, leur nettoyage et mise en forme avant de les déposer dans un gestionnaire de données à des fins d'analyse. Le monitoring cloud peut utiliser des services ou des outils de monitoring manuels (installés manuellement) et/ou automatisés (installés via une démarche DevOps) pour vérifier qu'un cloud est opérationnel.
+ La supervision cloud, on parle également de monitoring cloud, consiste en une série d'opérations d'analyse, de recueil d'information et de gestion qui contrôle un flux de travail cloud. Un exemple de flux de travail cloud peut être l'ingestion dans un cloud de données en provenance de capteurs, leur nettoyage et mise en forme avant de les déposer dans un gestionnaire de données à des fins d'analyse. Le monitoring cloud peut utiliser des services ou des outils de monitoring manuels (installés manuellement) et/ou automatisés (installés via une démarche DevOps) pour vérifier qu'un cloud est opérationnel.
 
 En un mot, la surveillance du cloud est une méthode d'examen, d'observation et de gestion du flux opérationnel dans une infrastructure informatique basée sur le cloud. Des techniques de gestion manuelles ou automatisées permettent de confirmer la disponibilité et les performances des sites Web, des serveurs, des applications et d'autres infrastructures en nuage. Cette évaluation continue des niveaux de ressources, des temps de réponse des serveurs et de la vitesse a pour objectif de prévoir un état problématique éventuel d'un service cloud avant que des problèmes plus graves surviennent, par exemple la défaillance totale de tous les services cloud.
 
-Dans ce qui suit nous utilisons des outils bien connus dans la communauté pour faire de la supervision cloud, outils déployer soit manuellement soit automatiquement, pour surveiller soit les VM, donc le système d'exploitation de la VM (sous section 6.2), soit de manière automatique (sous section 6.3), pour surveiller le cloud i.e. les services disponibles pour OpenStack / MicroStack. 
+Dans ce qui suit nous utilisons des outils bien connus dans la communauté pour réaliser de la supervision cloud, outils déployés soit manuellement soit automatiquement, pour surveiller soit les VM, donc le système d'exploitation de la VM (sous section 6.2), soit de manière automatique (sous section 6.3), pour surveiller le cloud i.e. les services disponibles pour OpenStack / MicroStack. 
 
 
 ### 6.2 Solutions de supervision des VMs
@@ -252,7 +252,7 @@ Parmi les solutions le plus utilisée d'après l'outil Google Trend pour faire d
  
  ### 7.3 Vérifications fonctionnelles
  
- ### 7.4 Conclusions
+ ### 7.4 Conclusion
  
 ## VIII. Information d’accompagnement au changement
 
