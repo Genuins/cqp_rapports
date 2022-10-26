@@ -55,20 +55,17 @@ Les scripts sont écrits de sorte à automatiser :
  <p align="center"> Figure 3 : Maquette de base proposé lors de l'appel </p>
 </p>
   
-
 La maquette réalisée, afin de donner accès aux applications, depuis le Système hôte Windows, est décrite à la figure 3. Nous avons pensé à la mise en place d’un serveur mandataire (reserve proxy).
 
 Avant d’entrer dans le vif du sujet nous aimerons faire une piqure de rappel concernant l’architecture de base présentée lors de la conception de l’infrastructure Medicarche. Cette architecture représente les besoins réels effectués lors de la rédaction du cahier de charge. Lors de la conception de la plateforme de Medicarche, nous avons proposé deux types de solution cloud qui sont AWS un fournisseur public et Openstack un Cloud de type privé. L’entreprise Medicarche avait opté pour Openstack lors de l’appel d’offre. 
 
 En résumé, le déploiement de l’infrastructure Medicarche a été scripté de bout en bout. Pour commencer le déploiement, nous exécutons la commande vagrant up, une commande de l’outil vagrant qui permet de créer une machine virtuelle. Nous avons provisionné le script de déploiement dans le fichier vagrantfile afin d’automatiser l’installation de Openstack ainsi que le déploiement des applications et du site web. La figure 4 détaille l'ensemble des phases de cette partie du déploiement.
 
-
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/vagrantfile.JPG?raw=true" alt="Script Vangantfile"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 4 : Script vagrant qui permet de déployer une machine virtuelle provisionnée. </p>
 </p>
   
-
 ### 3.1	Installation d’Openstack
 
 OpenStack est un ensemble de logiciels open source permettant de déployer une infrastructure de type cloud privé en suivant le modèle Infrastructure as a Service (IaaS). Une fois l'environnement Openstack installé, des accès (credantials) nous sont fournis afin d'accéder à la console en tant qu’administrateur.  Par défaut, Openstack configure la partie réseau en créant un sous réseau privé, un sous réseau public, la table de routage et d'autres services pour ne citer que ceux-là. La commande iptables nous permet d’autoriser le trafic venant de Openstack vers internet. Cet partie du déploiement correspond à ce qui est présenté à la figure 5.
@@ -203,7 +200,6 @@ Le test de montée en charge que nous prévoyons d’effectuer est un test au co
  <p align="center"> Figure 10 : Test de montée en charge </p>
 </p>
 
-
 ### 5.2	Test de stress du système
 
 Pour s’assurer que les gabarits choisis pour accueillir les applications web de l’entreprise Medicarche répondent bien au minimum des capacités requises, nous mettons en place ce type de test qui a pour objectif de stresser le CPU, la mémoire RAM, le I/O et le disque. Pour cela nous utilisons l’outil stress and stress-ng. L’installation s'effectue en ligne de commande et on pourra voir le résultat sur l’interface CLI. Sur la figure 11 nous pouvons voir sur le tableau de bord les points importants comme le traffic du réseau, les nombres des requêtes, le nombre des nouveaux utilisateurs, des tentatives de connexion.
@@ -213,7 +209,6 @@ Pour s’assurer que les gabarits choisis pour accueillir les applications web d
  <p align="center"> Figure 11 : monitoring de la machine virtuelle </p>
 </p>
 
-
 ### 5.3	Test de performance 
 
 Après avoir installé les applications web de l’entreprise Medicarche, on doit vérifier que le système répond normalement aux attentes du client. Pour s’assurer que c’est réellement le cas, nous avons choisi d'utiliser l’outil Tsung qui est approprié pour ce type de test. Tsung est un outil de test de performances permettant de réaliser des benchmarks massifs. De manière résumée, Tsung est un outil qui nous permettra de faire un rapport sur les statistiques du système, des transactions, du réseau, du débit et même des statuts liés aux requêtes HTTP.
@@ -222,35 +217,39 @@ Après avoir installé les applications web de l’entreprise Medicarche, on doi
  
  ### 6.1 Introduction à la supervision
  
- La supervision cloud, on parle également de monitoring cloud, consiste en une série d'opérations d'analyse, de recueil d'information et de gestion qui contrôle un flux de travail cloud. Un exemple de flux de travail cloud peut être l'ingestion dans un cloud de données en provenance de capteurs, leur nettoyage et mise en forme avant de les déposer dans un gestionnaire de données à des fins d'analyse. Le monitoring cloud peut utiliser des services ou des outils de monitoring manuels (installés manuellement) et/ou automatisés (installés via une démarche DevOps) pour vérifier qu'un cloud est opérationnel.
+La supervision cloud, on parle également de monitoring cloud, consiste en une série d'opérations d'analyse, de recueil d'information et de gestion qui contrôle un flux de travail cloud. Un exemple de flux de travail cloud peut être l'ingestion dans un cloud de données en provenance de capteurs, leur nettoyage et mise en forme avant de les déposer dans un gestionnaire de données à des fins d'analyse. Le monitoring cloud peut utiliser des services ou des outils de monitoring manuels (installés manuellement) et/ou automatisés (installés via une démarche DevOps) pour vérifier qu'un cloud est opérationnel.
 
 En un mot, la surveillance du cloud est une méthode d'examen, d'observation et de gestion du flux opérationnel dans une infrastructure informatique basée sur le cloud. Des techniques de gestion manuelles ou automatisées permettent de confirmer la disponibilité et les performances des sites Web, des serveurs, des applications et d'autres infrastructures en nuage. Cette évaluation continue des niveaux de ressources, des temps de réponse des serveurs et de la vitesse a pour objectif de prévoir un état problématique éventuel d'un service cloud avant que des problèmes plus graves surviennent, par exemple la défaillance totale de tous les services cloud.
 
 Dans ce qui suit nous utilisons des outils bien connus dans la communauté pour réaliser de la supervision cloud, outils déployés soit manuellement soit automatiquement, pour surveiller soit les VM, donc le système d'exploitation de la VM (sous section 6.2), soit de manière automatique (sous section 6.3), pour surveiller le cloud i.e. les services disponibles pour OpenStack / MicroStack. 
 
-
 ### 6.2 Solutions de supervision des VMs
 
-Parmi les solutions le plus utilisée d'après l'outil Google Trend pour faire de la supervision sont Prometheus, Nagios, InfluxDB, Grafana. Dans cette section, nous allons décrire les fonctionnalités de manière generale de ces outils.
+Parmi les solutions les plus utilisées, d'après l'outil Google Trend, pour faire de la supervision, sont Prometheus, Nagios, InfluxDB, Grafana. Dans cette section, nous allons décrire les fonctionnalités de haut niveau de ces outils.
 
  ### 6.2.1 Grafana
  
 [Grafana](https://grafana.com/) est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme Graphite, InfluxDB, Prometheus et Elasticsearch.
-Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de données. Il peut être déployé avec Docker. Il est écrit en Go et dispose d’une API HTTP complète.
+Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de données. Il peut être déployé avec Docker. Il est écrit en [Go](https://go.dev/), langage de programmation promulgué par Google, et dispose d’une API HTTP complète.
  
+### 6.3 Prometheus
  
- ### 6.3 Prometheus
+[Prometheus](https://prometheus.io/) est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de points d'entrée exposés à l'aide du protocole HTTP. Prometheus fonctionne de la manière suivante:
+
+* Plusieurs agents (exporteurs), qui s'exécutent généralement sur les machines à surveiller, exposent les métriques de suivi ;
+* Prometheus sert alors pour la centralisation et le stockage des métriques ;
+* Alertmanager déclenche l'émission d'alertes en fonction de règles métiers.
+
+Pour visualiser les métriques, Grafana ou Zabbix peuvent être utilises pour la restitution des métriques sous la forme de tableaux de bord.
+Prometheus a son propre langage de requête, PromQL, utilisé pour créer des tableaux de bord et les alertes.
+
+### 6.3 Solutions de supervision de l'infrastructure Openstack
+
+Introduction à écrire, puis lister quelques examples de réalisations. (voir mes précédents mails)
+
+### 6.4 Conclusion
  
-[Prometheus](https://prometheus.io/) est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de point d'entrée exposé à l'aide du protocole HTTP. Prometheus fonctionne de la manière suivante:
-
-* Plusieurs agents (exporteurs) qui s'exécutent généralement sur les machines à surveiller et vont exposer les métriques de suivi.
-* Prometheus pour la centralisation et le stockage des métriques.
-* Alertmanager qui déclenche l'émission d'alertes en fonction de règles.
-
-Pour visualiser les métrics, grafana ou Zabbix peut etre utiliser pour la restitution des métriques sous la forme de tableaux de bord.
-Prometheus à son propre langage de requete PromQL utilisé pour créer des tableaux de bord et la création d'alertes.
-
- ### 6.4 Conclusion
+ Il faut dire ici quelque est la solution qui a été retenu pour le projet MedicArche et donner quelques informations sur comment s'est fait l'intégration.
  
  ## VII- Mise en place d'un annuaire de type LDAP
  
