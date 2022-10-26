@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
 
 ### 3.2 Installation d’Openstack
 
-De preference créer un fichier bash openstack.sh copier et coller le script ci-dessous
+Le dossier scripts contient le fichier openstack.sh qui est composé du script suivant que nous commenté 
 
 ```
 #!/bin/bash
