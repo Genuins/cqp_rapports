@@ -241,8 +241,8 @@ Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de donné
  
  ### 6.3 Prometheus
  
- Prometheus est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de point d'entrée exposé à l'aide du protocole HTTP.
- 
+[Prometheus](https://prometheus.io/) est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de point d'entrée exposé à l'aide du protocole HTTP.
+
  ### 6.4 Conclusion
  
  ## VII- Mise en place d'un annuaire de type LDAP
