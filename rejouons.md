@@ -1,59 +1,57 @@
 # Migration de l'informatique de MedicArche vers le Cloud - Rejouer le déploiement de A à Z
 
-
 ## I.	Introduction
 
-Dans cette partie nous mettons à disposition des lecteurs les scripts qui permettent d'installer le cloud privé Openstack et de déployer les services cités dans la [page précedente](https://github.com/Genuins/cqp_rapports/edit/main/README.md). Pour le déploiement de l'infrastructure et l'installation des services de base, nous avons utilisés des scripts bash. Les interventions lié à la maintenance ou au déploiement des nouveaux services pourra s'éffectuer avec l'outil Terraform.
+Dans cette partie nous mettons à disposition les scripts qui permettent d'installer le cloud privé Openstack (MicroStack) et de déployer les services cités dans le [document](https://github.com/Genuins/cqp_rapports/edit/main/README.md) de présentation du projet. Nous vous invitons à lire ce document dans le détail avant de parcourir cette page. Pour le déploiement de l'infrastructure et l'installation des services de base, nous avons utilisé des scripts Bash. Les interventions liées à la maintenance ou au déploiement des services s'effectue avec l'outil Terraform.
 
 ## II.	Environnement de travail
 
+Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipée de 16Gb de mémoire RAM, de 300GB de disque dur, d'un processeur Intel i5 9500T. A priori un environnement Linux ou MacOs pourrait convenir car tous les outils listés ci-dessous sont également disponibles pour ces distributions de système d'exploitation. Cependant nous n'avons pas testé. Pour éxecuter le script d'installation du cloud privé Openstack nous avons besoin des prérequis suivants : 
 
-Tout ce qui suit a été réalisé et testé sur une machine Windows 10 équipé de 16Gb de mémoire RAM, de 300Gb de disque dur, d'un processeur i5 9500T. A priori un environnement Linux ou MacOs pourrait convenir car tous les outils listé ci-dessous pourrait convenir. Pour éxecuter le script d'installation du cloud privé Openstack nous avons besoin des prérequis suivantes : 
-
-* Installer [Virtualbox](https://www.virtualbox.org/) sur une machine dont le système d'exploitation est Windows 10.
-* Installer [Vagrant](https://www.vagrantup.com/downloads) sur la machine Windows 10
-* Installer le plugin Vagrant qui permet d'augmenter la taille du disque `vagrant plugin install vagrant-disksize `
-* Installer [Packer](https://www.packer.io/downloads) sur la machine Windows 10.
-* Installer l'outil [Terraform](https://www.terraform.io/downloads) de même sur la machine Windows 10.
+* Installer [Virtualbox](https://www.virtualbox.org/) sur une machine dont le système d'exploitation est Windows 10 ;
+* Installer [Vagrant](https://www.vagrantup.com/downloads) sur la machine Windows 10 ;
+* Installer le plugin Vagrant qui permet d'augmenter la taille du disque `vagrant plugin install vagrant-disksize` ;
+* Installer [Packer](https://www.packer.io/downloads) sur la machine Windows 10 ;
+* Installer l'outil [Terraform](https://www.terraform.io/downloads) de même sur la machine Windows 10 ;
 * Installer l'IDE Visualcode ou MobaXterm pour faciliter la connexion en SSH et l'écriture et le déploiement du code en bash ou avec l'outil Terraform.
 
 ## III.	Procédure de déploiement de l’infrastructure Medicarche
 
-
 ### 3.1 Clonage du dépot Medicarche
 
-Avant de commencer veuillez  cloner le dépot de l'infrastructure Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git` vous retrouverez un dossier scripts qui contient l'installation du cloud privé Openstack/Microstack et le fichier Vagranfile qui sera detaillé dans les lignes qui suivent.
+Avant de commencer veuillez  cloner le dépot qui permet de construire l'infrastructure Medicarche en éxecutant la commande `git clone https://gitlab.com/Genuiz/medicarche_ostack.git`. Vous obtiendrez un dossier `scripts` qui contient l'installation du cloud privé Openstack/Microstack et le fichier `Vagranfile` qui sera detaillé dans les lignes qui suivent.
 
 ### 3.2 Déploiement de la machine virtuelle avec l'outil Vagrant
 
-Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up` qui utilise le fichier `Vagrantfile`suivant : 
+Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up` qui provoque l'analyse et l'exécution du fichier `Vagrantfile`suivant : 
 
 ```
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Installation du systeme d'exploitation Linux Ubuntu qui acceuillera le cloud privé Openstack
+# Installation du système d'exploitation Linux Ubuntu qui acceuillera le cloud privé Openstack
 
 Vagrant.configure("2") do |config|
    
   # au préalable vous avez à installer le plugin permettant de redimensioner le disque par la commande : 
-  # vagrant plugin install vagrant-disksize depuis l'hote Windows
+  # vagrant plugin install vagrant-disksize 
+  # depuis l'hote Windows. N'oubliez pas ce préalable.
   
   # Definition de la taille du disque de la VM
   config.disksize.size = '100GB'
   config.vm.define "openstack" do |os|
     # Type de systeme d'exploitation utilisé
     os.vm.box = "bento/ubuntu-20.04"
-    #nom de la machine virtuelle
+    # Nom de la machine virtuelle
     os.vm.hostname = "openstack"
-    #Lien vers le depot vagrant contenant le système d'exploitation
+    # Lien vers le depot vagrant contenant le système d'exploitation
     os.vm.box_url = "bento/ubuntu-20.04"
-        #Taille du disque primaire et du disque secondaire
+        # Taille du disque primaire et du disque secondaire
 	os.vm.disk :disk, size: "80GB", primary: true
 	os.vm.disk :disk, size: "40GB", name: "extra_storage"
     # Adresse IP de la machine virtuelle dans le réseau
     os.vm.network :private_network, ip: "192.168.33.16"
-    # Proprieté de la machine virtuelle
+    # Proprietés de la machine virtuelle
     os.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -63,14 +61,14 @@ Vagrant.configure("2") do |config|
     end
         # Chemin vers le fichier contenant le script d'installation du cloud Microstack
 	os.vm.provision "shell", path: "scripts/openstack.sh"
-  end
-  
+  end 
   ```
-Le script précédent est commenté pour detailler les differentes étapes de construction.
+  
+Le script précédent est commenté pour détailler les differentes étapes de construction. Cela est fait à titre d'information.
 
 ### 3.3 Installation d’Openstack
 
-Le fichier Vagrantfile précédent permet l'éxecution du script openstack.sh donc il n'y a rien à faire. Le dossier scripts contient le fichier openstack.sh qui est présenté ci-dessous: 
+Le fichier `Vagrantfile` précédent lance l'éxecution du script `openstack.sh`, donc il n'y a rien à faire manuellement. C'est dans le dossier `scripts` que l'on trouve le fichier `openstack.sh` qui est présenté ci-dessous : 
 
 ```
 #!/bin/bash
@@ -88,28 +86,27 @@ sudo apt-get install dialog apt-utils -y
 sudo snap install microstack --edge --devmode
 snap list microstack
 
-#Installation de la configuration initial de microstack
+# Installation de la configuration initial de microstack
 sudo microstack init --auto --control
 
-#Installation de git et sshpass 
+# Installation de git et sshpass 
 sudo apt-get install git sshpass -y
 
-#Autoriser les machines virtuelles tournant dans microstack de se connecter à internet 
-# Le NAT est souvent implémenté par des routeurs, dans notre contextl'hôte effectuant le NAT comme un routeur NAT.
+# Autoriser les machines virtuelles tournant dans microstack de se connecter à Internet 
+# Le NAT est souvent implémenté par des routeurs, dans notre contexte l'hôte effectuant le NAT comme un routeur NAT.
 sudo iptables -t nat -A POSTROUTING -s 10.20.20.1/24 ! -d 10.20.20.1/24 -j MASQUERADE
 sudo sysctl net.ipv4.ip_forward=1
 
-#Recuperation des access pour se connecter à la console
+# Récupération des accès pour se connecter à la console
 sudo snap get microstack config.credentials.keystone-password
 
-#Recuperation des scripts d'installation des vms et l'installation des applications
+# Récupération des scripts d'installation des vms et l'installation des applications
 git clone https://gitlab.com/Genuiz/medicopen.git
 cd medicopen
 source auto.sh
-
 ```
 
-Dans le fichier `auto.sh` on retrouve les scripts qui  permettent de créer les gabarits des machine virtuelle, des groupes de sécurité, du televersement de l'image ubuntu dans Openstack, de la création des VMs ainsi que l'installation des applications. tous les scripts utilisés seront detaillé dans les lignes qui suivent. 
+Dans le fichier `auto.sh` on retrouve les scripts qui  permettent de créer les gabarits des machines virtuelles, des groupes de sécurité, du téléversement de l'image Ubuntu dans Openstack, de la création des VMs ainsi que l'installation des applications. Tous les scripts utilisés sont detaillés dans les lignes qui suivent. Ils sont tous commentés, donc ils n'appelent pas de commentaires particuliers. Nous les listons de manière brute.
 
 ### 3.4 Création des gabarits
 
