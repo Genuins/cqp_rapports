@@ -26,7 +26,7 @@ Avant de commencer veuillez  cloner le dépot de l'infrastricture Medicarche en 
 
 ### 3.2 Déploiement de la machine virtuelle avec l'outil Vagrant
 
-Dans un fichier nommmé Vagrantfile copier et coller le script ci-dessous puis éxecuter la commande `vagrant up`
+Pour créer la machine virtuelle, il suffit d'éxecuter la commande `vagrant up`
 
 ```
 # -*- mode: ruby -*-
@@ -36,7 +36,8 @@ Dans un fichier nommmé Vagrantfile copier et coller le script ci-dessous puis �
 
 Vagrant.configure("2") do |config|
    
-   # installer le plugin vagrant plugin install vagrant-disksize
+  # installer le plugin vagrant plugin install vagrant-disksize
+  # 
   config.disksize.size = '100GB'
   config.vm.define "openstack" do |os|
     os.vm.box = "bento/ubuntu-20.04"
