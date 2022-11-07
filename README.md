@@ -246,7 +246,14 @@ Prometheus a son propre langage de requête, PromQL, utilisé pour créer des ta
 
 ### 6.3 Solutions de supervision de l'infrastructure Openstack
 
-Introduction à écrire, puis lister quelques examples de réalisations. (voir mes précédents mails)
+Il existe plusieurs solution sur le marché, des solutions payantes et celle dite open source. En creusant un peu plus sur le sujet, nous avons découvert en faissant de la veille technologique, des solutions utilisées par des entreprises conccurent comme Le couple Prometheus Grafana, Zabbix, InfluxBD et la stack ELK pour
+ne citez que ceux-là. L'infrastructure Openstack peut etre monitoré des plusieures manières.
+
+La première solution est d'installer les binaires de prometheus dans une machine virtuelle dédié et d'installer les agents (Node_exporter) dans chaque VM de l'infra.
+Cette solution permet simplement de récuperer les métriques venant de chaque machine virtuelle à travers les agents déployés au préalable. 
+
+La deuxième solution permet de superviser tout l'infrastructure Openstack en créant un job qui permet de faire le service discovery. Cela permet de récuperer tous les 
+metrics de l'infrastructure Openstack (instances, network,...). Cette solution à pour avantage de faire la supervision de toute l'infrastructure.
 
 ### 6.4 GLPI
 
