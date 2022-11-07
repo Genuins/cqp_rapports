@@ -62,8 +62,7 @@ Vagrant.configure("2") do |config|
         # Chemin vers le fichier contenant le script d'installation du cloud Microstack
 	os.vm.provision "shell", path: "scripts/openstack.sh"
   end 
-  ```
-  
+  ``` 
 Le script précédent est commenté pour détailler les differentes étapes de construction. Cela est fait à titre d'information.
 
 ### 3.3 Installation d’Openstack
