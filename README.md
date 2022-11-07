@@ -127,7 +127,7 @@ Nous avons pensé à mettre les machines virtuelles dans un même sous réseau p
 -	Le port 22 pour assurer une connexion sécurisée en SSH ;
 -	Le Port 80 pour autoriser la communication en http.
 
-Les machines virtuelles ont toutes une adresse IP privée et une adresse IP publique afin de communiquer sur le réseau privé (communication entre les machines virtuelles) et sur le réseau externe pour la communication avec l’extérieur. Openstack propose un outil pour le log de toutes les actions effectuées sur la machine virtuelle. Elles peuvent être auditées grâce à cette fonctionnalité. Les machines virtuelles utilisent une clé privée crée lors du déploiement cela permet de mettre un accent sur la sécurité. Le script de la figure 8 donne un aperçu de la création de la machine virtuelle et l'association d'une adresse ip virtuelle.
+Les machines virtuelles ont toutes une adresse IP privée et une adresse IP publique afin de communiquer sur le réseau privé (communication entre les machines virtuelles) et sur le réseau externe pour la communication avec l’extérieur. Openstack propose un outil pour le log de toutes les actions effectuées sur la machine virtuelle. Elles peuvent être auditées grâce à cette fonctionnalité. Les machines virtuelles utilisent une clé privée crée lors du déploiement cela permet de mettre un accent sur la sécurité. Le script de la Figure 8 donne un aperçu de la création de la machine virtuelle et l'association d'une adresse ip virtuelle.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/instances.JPG?raw=true" alt="création de la virtuelle machine"/ style="width: 45vw; min-width: 330px;">
