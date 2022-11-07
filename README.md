@@ -233,7 +233,7 @@ Parmi les solutions les plus utilisées, d'après l'outil Google Trend, pour fai
 [Grafana](https://grafana.com/) est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme [Graphite](https://graphiteapp.org/), [InfluxDB](https://www.influxdata.com/), [Prometheus](https://prometheus.io/) et [Elasticsearch](https://www.elastic.co/fr/).
 Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de données. Il peut être déployé avec Docker. Il est écrit en [Go](https://go.dev/), langage de programmation promulgué par Google, et dispose d’une API HTTP complète.
  
-### 6.3 Prometheus
+### 6.2.2 Prometheus
  
 [Prometheus](https://prometheus.io/) est un logiciel libre de surveillance informatique et générateur d'alertes. Il enregistre des métriques en temps réel dans une base de données de séries temporelles (avec une capacité d'acquisition élevée) en se basant sur le contenu de points d'entrée exposés à l'aide du protocole HTTP. Prometheus fonctionne de la manière suivante:
 
@@ -243,6 +243,20 @@ Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de donné
 
 Pour visualiser les métriques, Grafana ou Zabbix peuvent être utilises pour la restitution des métriques sous la forme de tableaux de bord.
 Prometheus a son propre langage de requête, PromQL, utilisé pour créer des tableaux de bord et les alertes.
+
+### 6.2.2 ELK
+
+[ELK](https://www.elastic.co/fr/) Stack est l'une des principales solutions open-source de monitoring et de gestion des logs pour les entreprises qui souhaitent bénéficier des avantages de la centralisation des logs. C'est un outil d'analyse de logs composé de 3 logiciels : Elasticsearch, Logstash et Kibana.
+
+* Elasticsearch permet d'extraire les données
+* Logstash est un outil pour la saisie, le traitement et la sortie des données logs. Sa fonction est d’analyser, filtrer et découper les logs pour les transformer en    documents formatés à destination d’Elasticsearch. 
+* Kibana est un outil de visualisation
+
+Nous avons déployer la stack ELK afin de centraliser les logs et de les traiters avant de le monitorer cela permettra à l'entreprise d'avoir une trace de chaque action
+éffectuer dans l'infrastructure. 
+
+Nous avons pensées à rajouter l'agent packetbeat qui est un analyseur de paquets réseau en temps réel qu'on peut utiliser avec Elasticsearch pour fournir un système de surveillance des applications et d'analyse des performances.
+
 
 ### 6.3 Solutions de supervision de l'infrastructure Openstack
 
@@ -257,7 +271,7 @@ metrics de l'infrastructure Openstack (instances, network,...). Cette solution �
 
 ### 6.4 GLPI
 
-GLPI (sigle de Gestionnaire Libre de Parc Informatique) est un logiciel libre de gestion des services informatiques (ITSM) et de gestion des services d'assistance (issue tracking system et ServiceDesk). Cette solution libre est éditée en PHP et distribuée sous licence GPL.
+[GLPI](https://glpi-project.org/fr/) (sigle de Gestionnaire Libre de Parc Informatique) est un logiciel libre de gestion des services informatiques (ITSM) et de gestion des services d'assistance (issue tracking system et ServiceDesk). Cette solution libre est éditée en PHP et distribuée sous licence GPL.
 
 Elle permet de visualiser l'évolution du parc informatique grace à des plugins. Le plugin FusionInvotory utilisé dans le cas de notre projet permet de faire l'inventaire et la maintenance d'un parc informatique. Il recupere les informations des composants du parc informatique à travers l'agent FusionInvetory installé dans chaque ordinateur, machine virtuelle ou tout autre composant du parc.
 
@@ -271,6 +285,8 @@ qui composent le parc et le ServiceDesk pour la gestion des tickets en interne. 
 ### 6.5 Conclusion
  
  Il faut dire ici quelque est la solution qui a été retenu pour le projet MedicArche et donner quelques informations sur comment s'est fait l'intégration.
+ En conclusion la solution qui a été retenu pour la supervision de l'infrastructure est le couple Prometheus/Grafana pour monitorer les machines virtuelles ainsi que
+ les composants de cette dernière et la solution ELK (ElasticSearch LogStash Kibana) pour centraliser les logs et à porter des traitements en temps réel.
  
  ## VII- Mise en place d'un annuaire de type LDAP
  
