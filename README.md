@@ -248,7 +248,13 @@ Prometheus a son propre langage de requête, PromQL, utilisé pour créer des ta
 
 Introduction à écrire, puis lister quelques examples de réalisations. (voir mes précédents mails)
 
-### 6.4 Conclusion
+### 6.4 GLPI
+
+GLPI (sigle de Gestionnaire Libre de Parc Informatique) est un logiciel libre de gestion des services informatiques (ITSM) et de gestion des services d'assistance (issue tracking system et ServiceDesk). Cette solution libre est éditée en PHP et distribuée sous licence GPL.
+
+Elle permet de visualiser l'évolution du parc informatique grace à des plugins. Le plugin FusionInvotory utilisé dans le cas de notre projet permet de faire l'inventaire et la maintenance d'un parc informatique. Il recupere les informations des composants du parc informatique à travers l'agent FusionInvetory installé dans chaque ordinateur, machine virtuelle ou tout autre composant du parc.
+
+### 6.5 Conclusion
  
  Il faut dire ici quelque est la solution qui a été retenu pour le projet MedicArche et donner quelques informations sur comment s'est fait l'intégration.
  
