@@ -4,13 +4,13 @@
 
 La société Medicarche spécialisée dans la recherche sur les virus, est située sur deux sites, à LA DÉFENSE dans la Grande Arche (site dénommé ARCHE), et à Paris rue de l’Arcade, dans le 8ème arrondissement (site dénommé ARCADE). Sa croissance est actuellement importante en raison des demandes liées à la crise sanitaire. Aussi elle envisage d’ouvrir de nouveaux sites pour répondre aux besoins du marché. Pour répondre au cahier de charge de l’entreprise Medicarche concernant la migration vers le cloud, nous expliquons, dans ce document, comment réaliser un déploiement automatisé de l’infrastructure MedicArche dans le cloud. 
 
-Pour cela, nous déployons, entre autre chose, trois applications emblématiques (Syncthing, Nextcloud et Odoo) et un site Web via le CMS Wordpress dans une solution OpenStack qui est un orchestrateur de Cloud open source. Les différentes applications sont hébergées dans un sous réseau privé de l'orchestrateur dont seuls les collaborateurs de l’entreprise auront accès. Pour rendre cela possible nous avons développé deux types de script. Le premier script se déploie de bout en bout sans interaction humaine en exécutant la commande de déploiement du système OpenStack et le second script, qui est considéré comme le cœur du projet, peut se déployer après le premier et il installe les services sus mentionnés. Dans les lignes qui suivent nous décrivons l’environnement de travail de l’entreprise Medicarche, le processus de déploiement de l’infrastructure, le plan de test, l’accompagnement au changement et enfin nous pourrons conclure. 
+Pour cela, nous déployons, entre autre chose, trois applications emblématiques ([Syncthing](https://syncthing.net/), [Nextcloud](https://nextcloud.com/) et [Odoo](https://www.odoo.com/fr_FR)) et un site Web via le CMS [Wordpress](https://wordpress.com/fr/) dans une solution OpenStack qui est un orchestrateur de Cloud open source. Les trois applications emblématiques sont également Open source. Les différentes applications sont hébergées dans un sous réseau privé de l'orchestrateur dont seuls les collaborateurs de l’entreprise auront accès. Pour rendre cela possible nous avons développé deux types de script. Le premier script se déploie de bout en bout sans interaction humaine en exécutant la commande de déploiement du système OpenStack et le second script, qui est considéré comme le cœur du projet, peut se déployer après le premier et il installe les services sus mentionnés. Dans les lignes qui suivent nous décrivons l’environnement de travail de l’entreprise Medicarche, le processus de déploiement de l’infrastructure, le plan de test, l’accompagnement au changement et enfin nous pourrons conclure. 
 
 ## II.	Environnement de travail
 
-L’environnement de travail qui a permis de mettre en place le déploiement de l’infrastructure de l’entreprise Medicarche est composé d’une machine hôte dont le système d’exploitation est Microsoft Windows 10. La machine hôte est une machine dont le type de processeur est un Intel i5 composé de 8 cœurs physique et 4 cœurs logique, d’une mémoire RAM de 16 gigabytes et d’un disque dur de 300 gigabytes. Comme hyperviseur nous avons utilisé VirtualBox qui est un hyperviseur open source. Pour faciliter la communication au niveau réseau nous utilisons deux cartes réseaux. La première carte réseau est configurée en utilisant l’option NAT qui permettra la communication de la machine virtuelle hôte vers internet et la deuxième carte réseau est configurée avec l’option hôte privé pour faciliter la communication entre la machine virtuelle et la machine physique.
+L’environnement de travail qui a permis de mettre en place le déploiement de l’infrastructure de l’entreprise Medicarche est composé d’une machine hôte dont le système d’exploitation est Microsoft Windows 10. La machine hôte est une machine dont le type de processeur est un Intel i5 composé de 8 cœurs physique et 4 cœurs logique, d’une mémoire RAM de 16 gigabytes et d’un disque dur de 300 gigabytes. Comme hyperviseur nous avons utilisé [VirtualBox](https://www.virtualbox.org/) qui est un hyperviseur open source. Pour faciliter la communication au niveau réseau nous utilisons deux cartes réseaux. La première carte réseau est configurée en utilisant l’option NAT qui permettra la communication de la machine virtuelle hôte vers internet et la deuxième carte réseau est configurée avec l’option hôte privé pour faciliter la communication entre la machine virtuelle et la machine physique.
 
-Le déploiement a été réalisé grâce à Vagrant qui est un outil de création et de configuration d'environnements de développement virtuels qui facilite aussi l’automatisation. A l’aide de Vagrant nous avons déployé une machine virtuelle avec les caractéristiques suivantes :
+Le déploiement a été réalisé grâce à [Vagrant](https://www.vagrantup.com/) qui est un outil de création et de configuration d'environnements de développement virtuels qui facilite aussi l’automatisation. A l’aide de Vagrant nous avons déployé une machine virtuelle avec les caractéristiques suivantes :
 
 -	Système d’exploitation Linux Ubuntu Focal 20.04
 -	Disque dur de 100 gigabytes
@@ -18,7 +18,7 @@ Le déploiement a été réalisé grâce à Vagrant qui est un outil de créatio
 -	12 vCPUs
 -	Adresse IP 192.168.33.16 
 
-Ces paramètres se retrouvent dans la partie centrale de la figure 1.
+Ces paramètres se retrouvent dans la partie centrale de la Figure 1.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/virtualbox_ui.JPG?raw=true" alt="Virtualbox" style="width: 45vw; min-width: 230px;" />
@@ -27,13 +27,13 @@ Ces paramètres se retrouvent dans la partie centrale de la figure 1.
   
 Par ailleurs, Visual Code est un environnement de développement intégré qui facilite la création de scripts. Pour administrer la machine hôte qui héberge le cloud privé de l’entreprise Medicarche nous avons installé des plugins. Parmi les extensions que nous avons installées nous avons RemoteSSH une extension qui permet de se connecter en mode SSH dans les machines virtuelles se trouvant dans le cloud privé de l’entreprise Medicarche pour pouvoir effectuer des actions d’administration si cela s’avère nécessaire. 
 
-Nous avons également travaillé avec Packer qui est une solution open source permettant de construire des images système pour de multiples plateforme cloud. Pour construire les images dont nous avons besoin sous Openstack nous avons récupéré une image Linux Ubuntu Bionic 18.04 depuis le site officiel de Openstack avec le format QCOW2. Pour personnaliser l’image nous avons utilisé Packer en définissant un utilisateur par défaut et le mot de passe, la capacité maximale de mémoire RAM, de disque dur, le format, le format du clavier, la langue du système d’exploitation et le nombre de processeurs pouvant être utilisé.
+Nous avons également travaillé avec [Packer](https://www.packer.io/) qui est une solution open source permettant de construire des images système pour de multiples plateforme cloud. Pour construire les images dont nous avons besoin sous Openstack nous avons récupéré une image Linux Ubuntu Bionic 18.04 depuis le site officiel de Openstack avec le format QCOW2. Pour personnaliser l’image nous avons utilisé Packer en définissant un utilisateur par défaut et le mot de passe, la capacité maximale de mémoire RAM, de disque dur, le format, le format du clavier, la langue du système d’exploitation et le nombre de processeurs pouvant être utilisé.
 
-Enfin, nous avons utilisé Git qui est un logiciel de gestion de versions décentralisé. Il s'agit d'un logiciel libre et gratuit. Cet outil nous a été utile pour faire du versioning des scripts utilisés tout au long du déploiement de l’infrastructure. 
+Enfin, nous avons utilisé [Git](https://git-scm.com/) qui est un logiciel de gestion de versions décentralisé. Il s'agit d'un logiciel libre et gratuit. Cet outil nous a été utile pour faire du versioning des scripts utilisés tout au long du déploiement de l’infrastructure. 
 
 ## III.	Procédure de déploiement de l’infrastructure Medicarche
 
-Le déploiement de l’infrastructure se fait en utilisant le concept de Infrastructure as a code (IaaS). Pour la mise en place de l’infrastructure Openstack et le déploiement des applications (Syncthing, Nextcloud, Odoo), nous avons utilisé des scripts bash pour automatiser l’installation.
+Le déploiement de l’infrastructure se fait en utilisant le concept de Infrastructure as a Code ([IaaC](https://fr.wikipedia.org/wiki/Infrastructure_as_code)). Pour la mise en place de l’infrastructure Openstack et le déploiement des applications (Syncthing, Nextcloud, Odoo), nous avons utilisé des scripts bash pour automatiser l’installation.
 
 Les scripts sont écrits de sorte à automatiser :
 -	Le déploiement de l’infrastructure Openstack ;
@@ -48,7 +48,7 @@ Les scripts sont écrits de sorte à automatiser :
  <p align="center"> Figure 2 : Maquette de base proposée lors de l'appel d'offre</p>
 </p>
 
-<p>Initialement nous avons commencé par une mise en œuvre la maquette de base décrite à la figure 2. À la suite de difficultés rencontrées en rapport avec les performances de la machine virtuelle hôte, nous avons été contraints d'utiliser les services de base que propose Openstack.</p>
+<p>Initialement nous avons commencé par une mise en œuvre la maquette de base décrite à la Figure 2. À la suite de difficultés rencontrées en rapport avec les performances de la machine virtuelle hôte, nous avons été contraints d'utiliser les services de base que propose Openstack.</p>
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/maquettes_int%C3%A9gr%C3%A9_bis.JPG?raw=true" alt="Maquete 2"/ style="width: 45vw; min-width: 330px;">
@@ -59,7 +59,7 @@ La maquette réalisée, afin de donner accès aux applications, depuis le Systè
 
 Avant d’entrer dans le vif du sujet nous aimerons faire une piqure de rappel concernant l’architecture de base présentée lors de la conception de l’infrastructure Medicarche. Cette architecture représente les besoins réels effectués lors de la rédaction du cahier de charge. Lors de la conception de la plateforme de Medicarche, nous avons proposé deux types de solution cloud qui sont AWS un fournisseur public et Openstack un Cloud de type privé. L’entreprise Medicarche avait opté pour Openstack lors de l’appel d’offre. 
 
-En résumé, le déploiement de l’infrastructure Medicarche a été scripté de bout en bout. Pour commencer le déploiement, nous exécutons la commande vagrant up, une commande de l’outil vagrant qui permet de créer une machine virtuelle. Nous avons provisionné le script de déploiement dans le fichier vagrantfile afin d’automatiser l’installation de Openstack ainsi que le déploiement des applications et du site web. La figure 4 détaille l'ensemble des phases de cette partie du déploiement.
+En résumé, le déploiement de l’infrastructure Medicarche a été scripté de bout en bout. Pour commencer le déploiement, nous exécutons la commande vagrant up, une commande de l’outil vagrant qui permet de créer une machine virtuelle. Nous avons provisionné le script de déploiement dans le fichier vagrantfile afin d’automatiser l’installation de Openstack ainsi que le déploiement des applications et du site web. La Figure 4 détaille l'ensemble des phases de cette partie du déploiement.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/vagrantfile.JPG?raw=true" alt="Script Vangantfile"/ style="width: 45vw; min-width: 330px;">
@@ -68,21 +68,22 @@ En résumé, le déploiement de l’infrastructure Medicarche a été scripté d
   
 ### 3.1	Installation d’Openstack
 
-OpenStack est un ensemble de logiciels open source permettant de déployer une infrastructure de type cloud privé en suivant le modèle Infrastructure as a Service (IaaS). Une fois l'environnement Openstack installé, des accès (credantials) nous sont fournis afin d'accéder à la console en tant qu’administrateur.  Par défaut, Openstack configure la partie réseau en créant un sous réseau privé, un sous réseau public, la table de routage et d'autres services pour ne citer que ceux-là. La commande iptables nous permet d’autoriser le trafic venant de Openstack vers internet. Cet partie du déploiement correspond à ce qui est présenté à la figure 5.
-
+OpenStack est un ensemble de logiciels open source permettant de déployer une infrastructure de type cloud privé en suivant le modèle Infrastructure as a Service ([IaaS](https://fr.wikipedia.org/wiki/Infrastructure_as_a_service)). Une fois l'environnement Openstack installé, des accès (credantials) nous sont fournis afin d'accéder à la console en tant qu’administrateur.  Par défaut, Openstack configure la partie réseau en créant un sous réseau privé, un sous réseau public, la table de routage et d'autres services pour ne citer que ceux-là. La commande iptables nous permet d’autoriser le trafic venant de Openstack vers internet. Cet partie du déploiement correspond à ce qui est présenté à la Figure 5.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/installation_microstack.JPG?raw=true" alt="Script installation Microstack"/ style="width: 45vw; min-width: 330px;">
  <p align="center"> Figure 5 : Script d'installation Microstack</p>
 </p>
-  
+
+Nota : il existe plusieurs projets permettant de déployer, sur un seul noeud, une infrastructure OpenStack. Nous avons pratiqué avec [MicroStack](https://microstack.run/) et [DevStack](https://docs.openstack.org/devstack/latest/). Le présent document est rédigé en sous entendant une installation MicroStack.
+
 a)	Tableau de bord 
 
 Un tableau de bord permet de visualiser l’ensemble de ressources de l’infrastructure. Cela nous permet aussi de garder un œil sur l’évolution de l’infrastructure. Nous pouvons obtenir une vue sur les instances en cours d’utilisation, la quantité des vCPUs, la quantité de la RAM allouée aux instances en cours d’utilisation, les volumes, les groupes de sécurité, les sous-réseaux, les ports, les routeurs ainsi les adresses IP publiques des instances. 
 
 b)	Topologie réseau dans Openstack
 
-Lors de l’installation de Openstack plusieurs fonctionnalités sont installées par défaut. Une topologie réseau représentant l’architecture du réseau. Nous avons utilisé un sous réseau privé et un sous réseau public.  Pour des raisons de sécurité, nous avons déployé les machines virtuelles contenant les applications web dans le réseau privé et nous avons pensé à leur attribuer une adresse IP privée dont la passerelle est 192.168.222.1. Pour permettre la communication avec internet, un routeur virtuel fait office de passerelle entre le réseau privé et le sous réseau public. L’adresse IP de la passerelle est 10.20.20.224. Cette partie du déploiement est reprise à la figure 6.
+Lors de l’installation de Openstack plusieurs fonctionnalités sont installées par défaut. Une topologie réseau représentant l’architecture du réseau. Nous avons utilisé un sous réseau privé et un sous réseau public.  Pour des raisons de sécurité, nous avons déployé les machines virtuelles contenant les applications web dans le réseau privé et nous avons pensé à leur attribuer une adresse IP privée dont la passerelle est 192.168.222.1. Pour permettre la communication avec internet, un routeur virtuel fait office de passerelle entre le réseau privé et le sous réseau public. L’adresse IP de la passerelle est 10.20.20.224. Cette partie du déploiement est reprise à la Figure 6.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/archi_reseau.JPG?raw=true" alt="Topologie réseau"/ style="width: 45vw; min-width: 330px;">
@@ -101,7 +102,7 @@ Openstack permet de personnaliser des gabarits qui sont utilisés pour déployer
 -	La portée public ou privée ;
 -	Le swap ;
 
-On a aussi la possibilité d’ajouter des metadatas pour mieux identifier le gabarit. Sur la figure 7, nous avons trois exemples de création de gabarit qui correspondent à trois machines virtuelles identiques sauf pour le disque dont la capacité est de 5, 8 et 9 gigabits.
+On a aussi la possibilité d’ajouter des metadatas pour mieux identifier le gabarit. Sur la Figure 7, nous avons trois exemples de création de gabarit qui correspondent à trois machines virtuelles identiques sauf pour le disque dont la capacité est de 5, 8 et 9 gigabits.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/gabarits.JPG?raw=true" alt="Topologie réseau"/ style="width: 45vw; min-width: 330px;">
@@ -139,9 +140,9 @@ Un groupe de sécurité agit en tant que pare-feu virtuel pour les instances afi
  
 Openstack offre une interface d’administration des groupes de sécurité, on peut ajouter, modifier ou supprimer le trafic entrant ou le trafic sortant. En cas de dépannage rapide cela permettra à la DSI de Medicarche de pouvoir intervenir pour pouvoir régler des problèmes. 
 
-g)	Les pairs de clé 
+g)	Les paires de clé 
 
-Pour avoir accès à la machine virtuelle et pouvoir faire les opérations d’administration, nous avons, lors de la création des instances, mis en place un script qui permet de créer une paire de clés RSA et de les associer à l’instance. Ce type de connexion permet de renforcer la sécurité ; ainsi seuls les administrateurs de Medicarche pourrons avoir accès aux instances pour effectuer les taches de maintenances. Le script de la figure 9 permet d’automatiser la création d'une clé pour se connecter en SSH dans la machine virtuelle. On crée la paire de clé en attribuant le droit au propiretaire de la clé et en modifiant le fichier en lecture seule.
+Pour avoir accès à la machine virtuelle et pouvoir faire les opérations d’administration, nous avons, lors de la création des instances, mis en place un script qui permet de créer une paire de clés RSA et de les associer à l’instance. Ce type de connexion permet de renforcer la sécurité ; ainsi seuls les administrateurs de Medicarche pourrons avoir accès aux instances pour effectuer les taches de maintenances. Le script de la Figure 9 permet d’automatiser la création d'une clé pour se connecter en SSH dans la machine virtuelle. On crée la paire de clé en attribuant le droit au propriétaire de la clé et en modifiant le fichier en lecture seule.
  
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/key.JPG?raw=true" alt="création de paire de clé"/ style="width: 45vw; min-width: 330px;">
@@ -193,7 +194,7 @@ Dans le cadre du projet de déploiement il est important de passer des tests. Pl
 
 ### 5.1	Test de montée en charge 
 
-Le test de montée en charge que nous prévoyons d’effectuer est un test au cours duquel nous aurons simulé un nombre d'utilisateurs sans cesse croissant de manière à déterminer quelle charge limite le système est capable de supporter sans tomber. Nous effectuerons un test sur l’application Odoo, Nextcloud, Syncthing et le site web de l’entreprise Medicarche. Nous avons prévu de mettre en place un script en utilisant l’outil h2load. Une fois l’utilitaire installé, on a à exécuter la commande décrite à la figure 10, que l’on prévoit de scripter, pour toutes les autres applications de la plateforme Medicarche. Dans ce script nous simulons 100 clients qui produiront au total 10000 requêtes HTTP. En résumé, le script de la figure 10 permet de faire le test de montée en charge d'une machine virtuelle en passant en paramètre le nombre de clients et le nombre de requêtes.
+Le test de montée en charge que nous prévoyons d’effectuer est un test au cours duquel nous aurons simulé un nombre d'utilisateurs sans cesse croissant de manière à déterminer quelle charge limite le système est capable de supporter sans tomber. Nous effectuerons un test sur l’application Odoo, Nextcloud, Syncthing et le site web de l’entreprise Medicarche. Nous avons prévu de mettre en place un script en utilisant l’outil h2load. Une fois l’utilitaire installé, on a à exécuter la commande décrite à la figure 10, que l’on prévoit de scripter, pour toutes les autres applications de la plateforme Medicarche. Dans ce script nous simulons 100 clients qui produiront au total 10000 requêtes HTTP. En résumé, le script de la Figure 10 permet de faire le test de montée en charge d'une machine virtuelle en passant en paramètre le nombre de clients et le nombre de requêtes.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/test_mg.JPG?raw=true" alt="Montée en charge h2load"/ style="width: 45vw; min-width: 330px;">
@@ -202,7 +203,7 @@ Le test de montée en charge que nous prévoyons d’effectuer est un test au co
 
 ### 5.2	Test de stress du système
 
-Pour s’assurer que les gabarits choisis pour accueillir les applications web de l’entreprise Medicarche répondent bien au minimum des capacités requises, nous mettons en place ce type de test qui a pour objectif de stresser le CPU, la mémoire RAM, le I/O et le disque. Pour cela nous utilisons l’outil stress and stress-ng. L’installation s'effectue en ligne de commande et on pourra voir le résultat sur l’interface CLI. Sur la figure 11 nous pouvons voir sur le tableau de bord les points importants comme le traffic du réseau, les nombres des requêtes, le nombre des nouveaux utilisateurs, des tentatives de connexion.
+Pour s’assurer que les gabarits choisis pour accueillir les applications web de l’entreprise Medicarche répondent bien au minimum des capacités requises, nous mettons en place ce type de test qui a pour objectif de stresser le CPU, la mémoire RAM, le I/O et le disque. Pour cela nous utilisons l’outil stress and stress-ng. L’installation s'effectue en ligne de commande et on pourra voir le résultat sur l’interface CLI. Sur la Figure 11 nous pouvons voir sur le tableau de bord les points importants comme le traffic du réseau, les nombres des requêtes, le nombre des nouveaux utilisateurs, des tentatives de connexion.
 
 <p align="center">
  <img src="https://github.com/Genuins/cqp_rapports/blob/main/images/supervison_vm.JPG?raw=true" alt="monitoring"/ style="width: 45vw; min-width: 330px;">
@@ -225,11 +226,11 @@ Dans ce qui suit nous utilisons des outils bien connus dans la communauté pour 
 
 ### 6.2 Solutions de supervision des VMs
 
-Parmi les solutions les plus utilisées, d'après l'outil Google Trend, pour faire de la supervision, sont Prometheus, Nagios, InfluxDB, Grafana. Dans cette section, nous allons décrire les fonctionnalités de haut niveau de ces outils.
+Parmi les solutions les plus utilisées, d'après l'outil Google Trend, pour faire de la supervision, sont Prometheus, [Nagios](https://www.nagios.org/), InfluxDB, [Grafana](https://grafana.com/). Dans cette section, nous allons décrire les fonctionnalités de haut niveau de ces outils.
 
  ### 6.2.1 Grafana
  
-[Grafana](https://grafana.com/) est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme Graphite, InfluxDB, Prometheus et Elasticsearch.
+[Grafana](https://grafana.com/) est un outil qui permet de visualiser les données à travers un tableau de bord. Il permet de réaliser des tableaux de bord et des graphiques depuis plusieurs sources dont des bases de données temporelles comme [Graphite](https://graphiteapp.org/), [InfluxDB](https://www.influxdata.com/), [Prometheus](https://prometheus.io/) et [Elasticsearch](https://www.elastic.co/fr/).
 Grafana est multiplateforme. Il s'appuie sur un stockage dans une base de données. Il peut être déployé avec Docker. Il est écrit en [Go](https://go.dev/), langage de programmation promulgué par Google, et dispose d’une API HTTP complète.
  
 ### 6.3 Prometheus
