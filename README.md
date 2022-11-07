@@ -261,6 +261,13 @@ GLPI (sigle de Gestionnaire Libre de Parc Informatique) est un logiciel libre de
 
 Elle permet de visualiser l'évolution du parc informatique grace à des plugins. Le plugin FusionInvotory utilisé dans le cas de notre projet permet de faire l'inventaire et la maintenance d'un parc informatique. Il recupere les informations des composants du parc informatique à travers l'agent FusionInvetory installé dans chaque ordinateur, machine virtuelle ou tout autre composant du parc.
 
+Concernant le ServiceDesk, Glpi permet de mettre en place gestion des incidents, de problèmes et des demandes. Nous avons la possibilités de crée de des tickets et 
+d'en faire la suivi. 
+
+Dans le contexte du projet Médicarche, nous avons mise en place la gestion de parc informatique c'est à dire le ressencement des ordinateurs ou des outils informatique
+qui composent le parc et le ServiceDesk pour la gestion des tickets en interne. Le contact de la DSI pour les incidents, les problèmes ou les demandes passera par le biais de Glpi car les collaborateurs de l'entreprise Medicarche aurons le droit de soummetre un ticket à l'équique de la DSI.
+
+
 ### 6.5 Conclusion
  
  Il faut dire ici quelque est la solution qui a été retenu pour le projet MedicArche et donner quelques informations sur comment s'est fait l'intégration.
