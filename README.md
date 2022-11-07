@@ -248,26 +248,22 @@ Prometheus a son propre langage de requête, PromQL, utilisé pour créer des ta
 
 [ELK](https://www.elastic.co/fr/) Stack est l'une des principales solutions open-source de monitoring et de gestion des logs pour les entreprises qui souhaitent bénéficier des avantages de la centralisation des logs. C'est un outil d'analyse de logs composé de 3 logiciels : Elasticsearch, Logstash et Kibana.
 
-* Elasticsearch permet d'extraire les données
-* Logstash est un outil pour la saisie, le traitement et la sortie des données logs. Sa fonction est d’analyser, filtrer et découper les logs pour les transformer en    documents formatés à destination d’Elasticsearch. 
-* Kibana est un outil de visualisation
+* Elasticsearch permet d'extraire les données ;
+* Logstash est un outil pour la saisie, le traitement et la remonté des données logs. Sa fonction est d’analyser, filtrer et de découper les logs pour les transformer en documents formatés à destination d’Elasticsearch ;
+* Kibana est un outil de visualisation.
 
-Nous avons déployer la stack ELK afin de centraliser les logs et de les traiters avant de le monitorer cela permettra à l'entreprise d'avoir une trace de chaque action
-éffectuer dans l'infrastructure. 
+Nous avons pu déployer la stack ELK afin de centraliser les logs et de les traiter. Cela permet à l'entreprise MediArche d'avoir une trace de chaque action
+éffectuée dans l'infrastructure. 
 
-Nous avons pensées à rajouter l'agent packetbeat qui est un analyseur de paquets réseau en temps réel qu'on peut utiliser avec Elasticsearch pour fournir un système de surveillance des applications et d'analyse des performances.
-
+Nous avons pensé également à rajouter l'agent packetbeat qui est un analyseur de paquets réseau en temps réel qu'on peut utiliser avec Elasticsearch pour fournir un système de surveillance des applications et d'analyse des performances.
 
 ### 6.3 Solutions de supervision de l'infrastructure Openstack
 
-Il existe plusieurs solution sur le marché, des solutions payantes et celle dite open source. En creusant un peu plus sur le sujet, nous avons découvert en faissant de la veille technologique, des solutions utilisées par des entreprises conccurent comme Le couple Prometheus Grafana, Zabbix, InfluxBD et la stack ELK pour
-ne citez que ceux-là. L'infrastructure Openstack peut etre monitoré des plusieures manières.
+Il existe plusieurs solutions, payantes et celles dite open source, pour effectuer la supervision d'une infrastructure OpenStack. En creusant un peu plus le sujet par de la veille technologique, nous avons trouvé que les solutions les plus utilisées par les entreprises concernent Prometheus/Grafana, Zabbix, InfluxBD et la stack ELK, pour ne citez que celle-là. L'infrastructure Openstack peut alors être monitorée des plusieures manières.
 
-La première solution est d'installer les binaires de prometheus dans une machine virtuelle dédié et d'installer les agents (Node_exporter) dans chaque VM de l'infra.
-Cette solution permet simplement de récuperer les métriques venant de chaque machine virtuelle à travers les agents déployés au préalable. 
+La première solution est d'installer les binaires de prometheus dans une machine virtuelle dédiée et d'installer les agents (Node_exporter) dans chaque VM de l'infra. Cette solution permet simplement de récupérer les métriques venant de chaque machine virtuelle à travers les agents déployés au préalable. 
 
-La deuxième solution permet de superviser tout l'infrastructure Openstack en créant un job qui permet de faire le service discovery. Cela permet de récuperer tous les 
-metrics de l'infrastructure Openstack (instances, network,...). Cette solution à pour avantage de faire la supervision de toute l'infrastructure.
+La deuxième solution permet de superviser toute l'infrastructure (l'hyperviseur) Openstack en créant, selon la terminologie consacrée, un job qui permet de rendre le service de découverte (discovery). Cela permet de récupérer toutes les métriques de l'infrastructure Openstack, comme par exemple les instances, network,... Cette solution a pour avantage de faire la supervision de toute l'infrastructure, depuis les VMs jusqu'à l'hyperviseur OpenStack, dans un seul et même tableau de supervision.
 
 ### 6.4 GLPI
 
