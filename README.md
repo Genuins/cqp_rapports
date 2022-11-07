@@ -325,11 +325,15 @@ Pour conclure, OpenStack est une infrastructure open source d'Infrastructure as 
 
 ## X.	Webographie
 
+
 - Rédiger un plan de test -  https://www.ingenieurtest.fr/2018/04/rediger-un-plan-de-test.html
 - Tsung - https://blog.admin-linux.org/administration/tsung-outils-de-benchmark-multi-protocole
+- Prometheus/Grafana - https://prometheus.io/docs/visualization/grafana/
+- ELK - https://www.elastic.co/guide/index.html
 - Microstack - https://microstack.run/
 - Odoo - https://fr.wikipedia.org/wiki/Odoo
 - Nextcloud - https://nextcloud.com/
 - Syncthing -https://doc.ubuntu-fr.org/syncthing
 - Repository medicarche - https://gitlab.com/Genuiz/medicarche_ostack.git 
 - Repository medicarche core - https://gitlab.com/Genuiz/medicopen.git 
+
