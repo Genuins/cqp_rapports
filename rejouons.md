@@ -427,4 +427,127 @@ for machine in `echo vm1 vm2 vm3 vm4`; do
     esac
 done
 ```
+### 4.1 Installation des applications de supervision
+
+#### 4.1.1 Installation de prometheus
+
+```
+#Creation user and group user
+sudo useradd --no-create-home --shell /bin/false prometheus
+sudo useradd --no-create-home --shell /bin/false node_exporter
+
+sudo mkdir /etc/prometheus
+sudo mkdir /var/lib/prometheus
+
+sudo chown prometheus:prometheus /etc/prometheus
+sudo chown prometheus:prometheus /var/lib/prometheus
+
+#Prometheus installation
+
+#Download Prometheus Binary File
+wget https://github.com/prometheus/prometheus/releases/download/v2.39.1/prometheus-2.39.1.linux-amd64.tar.gz
+sha256sum prometheus-2.39.1.linux-amd64.tar.gz
+tar -xvf prometheus-2.39.1.linux-amd64.tar.gz
+
+
+#Copy Prometheus Binary files
+sudo cp prometheus-2.39.1.linux-amd64/prometheus /usr/local/bin/
+sudo cp prometheus-2.39.1.linux-amd64/promtool /usr/local/bin/
+
+#Update Prometheus user ownership on Binaries
+sudo chown prometheus:prometheus /usr/local/bin/prometheus
+sudo chown prometheus:prometheus /usr/local/bin/promtool
+
+#Copy Prometheus Console Libraries
+sudo cp -r prometheus-2.39.1.linux-amd64/consoles /etc/prometheus
+sudo cp -r prometheus-2.39.1.linux-amd64/console_libraries /etc/prometheus
+sudo cp -r prometheus-2.39.1.linux-amd64/prometheus.yml /etc/prometheus
+
+#Update Prometheus ownership on Directories
+sudo chown -R prometheus:prometheus /etc/prometheus/consoles
+sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+sudo chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
+
+#Check Prometheus Version
+prometheus --version
+promtool --version
+
+#Editer /etc/prometheus/prometheus.yml lors de la modification de ce fichier ne pas oblier de restart le service prometheus
+
+#Creating Prometheus Systemd file
+sudo touch /etc/systemd/system/prometheus.service
+sudo chmod 556 /etc/systemd/system/prometheus.service
+sudo echo "[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/prometheus.service
+
+
+sudo systemctl daemon-reload
+sudo systemctl start prometheus
+sudo systemctl enable prometheus
+#sudo systemctl status prometheus
+
+#Accessing Prometheus
+sudo ufw allow 9090/tcp
+```
+
+#### 4.1.1 Installation de grafana
+
+```
+sudo apt-get install -y apt-transport-https
+sudo apt-get install -y software-properties-common wget
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+                   
+echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+sudo apt-get update
+sudo apt-get install grafana-enterprise -y
+sudo systemctl daemon-reload
+sudo systemctl start grafana-server
+#sudo systemctl status grafana-server
+sudo systemctl enable grafana-server.service
+
+#Node_exporter installation
+wget https://github.com/prometheus/node_exporter/releases/download/v1.4.0/node_exporter-1.4.0.linux-amd64.tar.gz
+sudo tar -xvf node_exporter-*.*-amd64.tar.gz
+
+#cd node_exporter-1.4.0.linux-amd64
+sudo cp node_exporter-1.4.0.linux-amd64/node_exporter /usr/local/bin
+
+# Creating Node Exporter Systemd service
+#cd /lib/systemd/system
+sudo touch /lib/systemd/system/node_exporter.service
+sudo chmod 556 /lib/systemd/system/node_exporter.service
+sudo echo "[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=simple
+User=node_exporter
+Group=node_exporter
+ExecStart=/usr/local/bin/node_exporter
+Restart=always
+RestartSec=10s
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/node_exporter.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter
+
+```
+
+
 
