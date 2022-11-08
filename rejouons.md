@@ -503,7 +503,7 @@ sudo systemctl enable prometheus
 sudo ufw allow 9090/tcp
 ```
 
-#### 4.1.1 Installation de grafana
+#### 4.1.2 Installation de grafana
 
 ```
 sudo apt-get install -y apt-transport-https
@@ -548,6 +548,182 @@ sudo systemctl enable node_exporter
 sudo systemctl start node_exporter
 
 ```
+#### 4.1.3 Installation de ELK
+
+```
+echo "##########################################################"
+echo "# Etape 1 Installation des prerequis et de elasticsearch #"
+echo "##########################################################"
+
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt update
+sudo apt install elasticsearch -y
+
+sudo sed -i '/#network.host: 192.168.0.1/c\network.host: 0.0.0.0' /etc/elasticsearch/elasticsearch.yml  
+sudo sed -i '/#node.name: node-1/c\node.name: node-1' /etc/elasticsearch/elasticsearch.yml   
+sudo sed -i '75i cluster.initial_master_nodes: ["node-1"]' /etc/elasticsearch/elasticsearch.yml
 
 
+sudo systemctl start elasticsearch
+sudo systemctl enable elasticsearch
 
+curl -X GET "localhost:9200"
+
+echo "##########################################################"
+echo "# Etape 2 Installation de Kibana                         #"
+echo "##########################################################"
+
+sudo apt install kibana -y
+sudo systemctl enable kibana
+sudo systemctl start kibana
+sudo apt install nginx -y
+echo "MyStrongCryptedPassword" > filepass.txt
+echo "kibanaadmin:`openssl passwd -in filepass.txt -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
+
+sudo touch /etc/nginx/sites-available/elk_medicarche
+sudo chmod 777 /etc/nginx/sites-available/elk_medicarche
+
+sudo echo "
+server {
+    listen 90;
+
+    server_name elk_medicarche;
+
+    #auth_basic "Restricted Access";
+    auth_basic_user_file /etc/nginx/htpasswd.users;
+
+    location / {
+        proxy_pass http://localhost:5601;
+        proxy_http_version 1.1;
+        #proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        #proxy_set_header Host $host;
+        #proxy_cache_bypass $http_upgrade;
+    }
+}
+" > /etc/nginx/sites-available/elk_medicarche
+sudo ln -s /etc/nginx/sites-available/elk_medicarche /etc/nginx/sites-enabled/elk_medicarche
+sudo nginx -t
+sudo systemctl reload nginx
+
+echo "##########################################################"
+echo "# Etape 3 Installation de Logstash                       #"
+echo "##########################################################"
+sudo apt install logstash -y
+sudo touch /etc/logstash/conf.d/02-beats-input.conf
+sudo chmod 777 /etc/logstash/conf.d/02-beats-input.conf
+sudo echo "
+input {
+  beats {
+    port => 5044
+  }
+}
+" > /etc/logstash/conf.d/02-beats-input.conf
+sudo touch  /etc/logstash/conf.d/30-elasticsearch-output.conf
+sudo chmod 777 /etc/logstash/conf.d/30-elasticsearch-output.conf
+sudo echo '
+output {
+  if [@metadata][pipeline] {
+elasticsearch {
+  hosts => ["localhost:9200"]
+  manage_template => false
+  index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+  pipeline => "%{[@metadata][pipeline]}"
+}
+  } else {
+elasticsearch {
+  hosts => ["localhost:9200"]
+  manage_template => false
+  index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+}
+  }
+}
+' > /etc/logstash/conf.d/30-elasticsearch-output.conf
+sudo -u logstash /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+sudo systemctl start logstash
+sudo systemctl enable logstash
+
+echo "##########################################################"
+echo "# Etape 4 Installation de l'agent Filebeat               #"
+echo "##########################################################"
+sudo apt install filebeat -y
+# sudo nano /etc/filebeat/filebeat.yml Edit fileBeat à la mano
+sudo filebeat modules enable system
+sudo filebeat modules list
+sudo filebeat setup --pipelines --modules system
+sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['localhost:9200'] -E setup.kibana.host=localhost:5601
+sudo systemctl start filebeat
+sudo systemctl enable filebeat
+curl -XGET 'http://localhost:9200/filebeat-*/_search?pretty'
+
+echo "##########################################################"
+echo "# Etape 5 Installation de l'agent PacketBeat             #"
+echo "##########################################################"
+
+sudo apt install apt-transport-https -y
+sudo apt update && sudo apt install packetbeat -y
+sudo systemctl start packetbeat
+sudo packetbeat setup
+
+```
+#### 4.1.4 Installation de GLPI
+
+```
+#Etape 1 Installation de GLPI
+sudo apt update
+sudo apt install php apache2 mariadb-server -y
+sudo systemctl enable apache2 mariadb
+sudo systemctl reload apache2
+
+#sudo mysql_secure_installation
+
+sudo mysql -u root --execute  "UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User = 'root'; FLUSH PRIVILEGES;"
+
+sudo mysql -u root --execute  "CREATE USER 'glpi'@'localhost' IDENTIFIED BY 'StrongDBPassword';
+CREATE DATABASE IF NOT EXISTS glpi CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+GRANT ALL PRIVILEGES ON glpi.* TO 'glpi'@'localhost';
+FLUSH PRIVILEGES; "
+
+sudo apt install perl -y
+sudo apt install php-ldap php-imap php-apcu php-xmlrpc php-cas php-mysqli php-mbstring php-curl php-gd php-simplexml php-xml php-intl php-zip php-bz2 -y
+
+sudo systemctl restart apache2
+
+sudo apt-get -y install libapache2-mod-php
+sudo apt-get -y install wget
+export VER="9.3.2"
+wget https://github.com/glpi-project/glpi/releases/download/$VER/glpi-$VER.tgz
+
+tar xvf glpi-$VER.tgz
+sudo mv glpi /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 775 /var/www/html/glpi
+
+
+# Etape 2 Installation du plugin fusionInventory
+
+sudo apt-get update
+sudo wget -P /usr/src https://github.com/fusioninventory/fusioninventory-for-glpi/archive/glpi9.3+1.3.tar.gz
+sudo tar -zxvf /usr/src/glpi9.3+1.3.tar.gz -C /var/www/html/glpi/plugins
+sudo chown -R www-data /var/www/html/glpi/plugins
+
+cd /var/www/html/glpi/plugins
+sudo mv fusioninventory-for-glpi-glpi9.3-1.3/ fusioninventory/
+cd ~
+
+#Installation Agent fusion Inventory dans le poste client
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 049ED9B94765572E
+wget -O - http://debian.fusioninventory.org/debian/archive.key | apt-key add -
+sudo apt-get install lsb-release -y 
+sudo echo "deb http://debian.fusioninventory.org/debian/ `lsb_release -cs` main" >> /etc/apt/sources.list
+sudo apt-get update
+sudo apt-get install fusioninventory-agent -y
+sudo sed -i "$ a server = http://ip_srv/glpi/plugins/fusioninventory" /etc/fusioninventory/agent.cfg
+
+#Remonter les metrics
+sudo fusioninventory-agent
+
+```
